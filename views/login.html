@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html<%- cache ? ' manifest="cache.manifest"' : '' %>>
+
+    <head>
+        <title>StackEdit – Login</title>
+        <link rel="canonical" href="https://stackedit.io/editor">
+        <link rel="icon" href="res-min/img/stackedit-32.ico" type="image/x-icon">
+        <link rel="icon" sizes="192x192" href="res-min/img/logo-highres.png">
+        <link rel="shortcut icon" href="res-min/img/stackedit-32.ico" type="image/x-icon">
+        <link rel="shortcut icon" sizes="192x192" href="res-min/img/logo-highres.png">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="res-min/img/logo-ipad-retina.png">
+        <meta charset="UTF-8">
+        <meta name="description" content="Full-featured, open-source Markdown editor based on PageDown, the Markdown library used by Stack Overflow and the other Stack Exchange sites.">
+        <meta name="author" content="Benoit Schweblin">
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="msvalidate.01" content="5E47EE6F67B069C17E3CDD418351A612">
+        <link rel="stylesheet" href="res-min/themes/default.css">
+        <script>
+            // Use ?debug to serve original JavaScript files instead of minified
+            window.baseDir = 'res';
+            if (!/(\?|&)debug($|&)/.test(location.search)) {
+                window.baseDir += '-min';
+            }
+            window.require = {
+                baseUrl: window.baseDir,
+                deps: ['login']
+            };
+            var courseMap = <%- JSON.stringify(courseMap, null, 2) %>;
+        </script>
+        <script src="res-min/require.js"></script>
+    </head>
+
+    <body>
+]        <div id='choose-courses' class='modal'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Choose your course</h4>
+                        <h4 class="couchdb-url"></h4>
+                        <img height="64" data-stackedit-src="logo.svg" />
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label" for="select-spell-check-locale">Courses</label>
+                                <div class="col-sm-6">
+                                    <select id="select-course" class="form-control">
+                                    <% courses.forEach(function(course) { %>
+                                        <option value=<%- course.id %>><%- course.name %></option>
+                                    <% }); %>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/editor" id="to-editor" class="btn btn-primary" data-dismiss="modal">Go to Editor</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
