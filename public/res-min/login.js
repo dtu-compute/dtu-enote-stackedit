@@ -4115,7 +4115,7 @@ if (function(t, e) {
   t("#choose-courses").modal(), t("#to-editor").click(function() {
    var e = t("#select-course option:selected").val();
    r.couchdbUrl = window.courseMap[e], console.log("couchDB url: " + r.couchdbUrl), 
-   i.settings = JSON.stringify(r), window.location = "editor";
+   i.settings = JSON.stringify(r), window.location = "editor" + window.location.search;
   });
  });
 }), define("login", function() {});
