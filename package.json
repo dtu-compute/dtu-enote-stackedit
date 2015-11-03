@@ -11,9 +11,11 @@
     "doc": "doc"
   },
   "dependencies": {
+    "cas-authentication": "0.0.5",
     "compression": "^1.0.11",
     "ejs": "~0.8.4",
     "express": "^4.8.5",
+    "express-session": "^1.12.1",
     "request": "~2.40.0",
     "serve-static": "^1.6.5",
     "ssh2": "^0.3.5",

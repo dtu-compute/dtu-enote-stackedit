@@ -57,6 +57,7 @@ gulp.task('jshint', function() {
 gulp.task('clean-requirejs', function() {
 	return gulp.src([
 		'./public/res-min/main.js',
+		'./public/res-min/login.js',
 		'./public/res-min/require.js'
 	])
 		.pipe(clean());
@@ -76,6 +77,36 @@ gulp.task('requirejs', [
 		name: 'main',
 		out: 'main.js',
 		mainConfigFile: 'public/res/main.js',
+		optimize: 'uglify2',
+		inlineText: true,
+		paths: {
+			mathjax: 'empty:'
+		},
+		excludeShallow: [
+			'css/css-builder',
+			'less/lessc-server',
+			'less/lessc'
+		]
+	})
+		.pipe(uglify({
+			output: {
+				beautify: true,
+				indent_level: 1,
+				ascii_only: true
+			}
+		}))
+		.pipe(gulp.dest('./public/res-min/'));
+});
+
+gulp.task('requirejs-login', [
+	'copy-requirejs',
+	'constants'
+], function() {
+	return requirejs({
+		baseUrl: 'public/res',
+		name: 'login',
+		out: 'login.js',
+		mainConfigFile: 'public/res/login.js',
 		optimize: 'uglify2',
 		inlineText: true,
 		paths: {
@@ -217,6 +248,7 @@ gulp.task('default', function(cb) {
 	runSequence([
 			'jshint',
 			'requirejs',
+			'requirejs-login',
 			'less',
 			'copy-font',
 			'copy-img'

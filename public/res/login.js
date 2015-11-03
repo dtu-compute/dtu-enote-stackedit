@@ -68,12 +68,12 @@ require([
 
   $(function() {
     $('#choose-courses').modal();
-    $('#to-editor').click(function(e) { 
-      var courseId = $('#select-course option:selected').val()
-      settings.couchdbUrl = courseMap[courseId];
+    $('#to-editor').click(function(/*e*/) { 
+      var courseId = $('#select-course option:selected').val();
+      settings.couchdbUrl = window.courseMap[courseId];
       console.log('couchDB url: ' + settings.couchdbUrl);
       storage.settings = JSON.stringify(settings);
-      window.location = 'editor';
-    })
+      window.location = 'editor'+window.location.search;
+    });
   });
 });

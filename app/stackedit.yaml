@@ -1,12 +1,12 @@
 ---
 02402 - Introduction to Statistics:
-   db: http://user02402:pass02402@enote.compute.dtu.dk:5984/db02402
+   db: https://enote.compute.dtu.dk:6984/documents02402
    members:
      - abcd
      - mttj
      - perbb
 01005 - Lineær Algebra:
-   db: http://user01005:pass01005@enote.compute.dtu.dk:5984/db01005
+   db: https://enote.compute.dtu.dk:6984/documents01005
    members:
      - abcd
      - ksch
