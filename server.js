@@ -15,7 +15,15 @@ if(!process.env.NO_CLUSTER && cluster.isMaster) {
 	});
 }
 else {
+	var server;
+
+	var serverStarted = function() {
+		console.log('HTTP server started: ' + server.address().address + ':' + server.address().port);
+		app.setServer(server);
+	};
+
 	var port = process.env.PORT || 3000;
+	var host = process.env.HOSTNAME || null;
 	if(port == 443) {
 		// OpsWorks configuration
 		var fs = require('fs');
@@ -24,15 +32,11 @@ else {
 			cert: fs.readFileSync(__dirname + '/../../shared/config/ssl.crt', 'utf8'),
 			ca: fs.readFileSync(__dirname + '/../../shared/config/ssl.ca', 'utf8').split('\n\n')
 		};
-		var httpsServer = https.createServer(credentials, app);
-		httpsServer.listen(port, null, function() {
-			console.log('HTTPS server started: https://localhost');
-		});
+		server = https.createServer(credentials, app);
+		server.listen(port, host, serverStarted);
 		port = 80;
 	}
-	var httpServer = http.createServer(app);
-	httpServer.listen(port, null, function() {
-		console.log('HTTP server started: http://localhost:' + port);
-	});
+	server = http.createServer(app);
+	server.listen(port, host, serverStarted);
 }
 

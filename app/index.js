@@ -30,12 +30,7 @@ app.all('*', function(req, res, next) {
 // Use gzip compression
 app.use(compression());
 
-// Create a new instance of CASAuthentication. 
-var cas = new CASAuthentication({
-	cas_url     : 'https://auth.dtu.dk/dtu',
-	service_url : 'https://auth.dtu.dk/dtu/login?service=',
-	cas_version : '2.0',
-});
+var cas;
 
 function debug_bounce(req, res, next) {
 	if (!req.query.hasOwnProperty('debug') ) {
@@ -137,5 +132,19 @@ app.use(function(req, res) {
 	res.status(404);
 	res.render('error_404.html');
 });
+
+app.setServer = function(server) {
+	// Initialize the CASAuthentication when we know our address
+	var casProps = {
+		cas_url     : 'https://auth.dtu.dk/dtu',
+		service_url : server.address().address + ':' + server.address().port,
+		cas_version : '2.0',
+	};
+
+	// Create a new instance of CASAuthentication. 
+	cas = new CASAuthentication(casProps);
+
+	console.log(casProps);
+};
 
 module.exports = app;
