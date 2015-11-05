@@ -10,7 +10,7 @@ var CASAuthentication = require('cas-authentication');
 // Set up an Express session, which is required for CASAuthentication. 
 app.use( session({
     secret            : 'super secret key',
-    store             : new FileStore,
+    store             : new FileStore(),
     resave            : true,
     saveUninitialized : true,
 }));
@@ -46,7 +46,7 @@ function debug_wrapper(f) {
 			req.session.cas_user = 'abcd';
 		}
 		next();
-	}
+	};
 }
 
 app.post('/pdfExport', require('./pdf').export);
@@ -137,15 +137,18 @@ app.use(function(req, res) {
 });
 
 app.setServer = function(server) {
+	var service_url = 'http://' + server.address().address + ':' + server.address().port;
+
 	// Initialize the CASAuthentication when we know our address
-	var casProps = {
+    var casProps = {
 		cas_url     : 'https://auth.dtu.dk/dtu',
-//		service_url : 'http://' + server.address().address + ':' + server.address().port,
-    service_url : 'http://localhost:3000',
+    service_url : service_url,
 		cas_version : '2.0',
 		//is_dev_mode	: true,
 		//dev_mode_user : 'abcd',
 	};
+
+	casProps.service_url = 'http://localhost:3000';
 
 	// Create a new instance of CASAuthentication. 
 	cas = new CASAuthentication(casProps);
