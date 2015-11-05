@@ -40,13 +40,14 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title">Choose your course</h4>
-                        <p class="couchdb-url"><b><%- cas_user %></b> is logged in.<p/>
+                        <p class="couchdb-url"><b><%- cas_user %></b> is logged in. Click <a href="/logout">here</a> to log out.<p/>
                         <img height="64" data-stackedit-src="logo.svg" />
                     </div>
                     <div class="modal-body">
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-5 control-label" for="select-spell-check-locale">Courses</label>
+                                <% if (courses && courses.length > 0) { %>
                                 <div class="col-sm-6">
                                     <select id="select-course" class="form-control">
                                     <% courses.forEach(function(course) { %>
@@ -54,6 +55,11 @@
                                     <% }); %>
                                     </select>
                                 </div>
+                                <% } else { %>
+                                <div class="col-sm-6">
+                                    <h3>No courses available.</h3>
+                                </div>
+                                <% } %>
                             </div>
                         </div>
                     </div>

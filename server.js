@@ -23,7 +23,10 @@ else {
 	};
 
 	var port = process.env.PORT || 3000;
-	var host = process.env.HOSTNAME || null;
+	var host = process.env.SE_HOSTNAME || null;
+
+	console.log('host: ' + host);
+
 	if(port == 443) {
 		// OpsWorks configuration
 		var fs = require('fs');

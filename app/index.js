@@ -1,5 +1,6 @@
 var express = require('express');
 var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 var app = express();
 var compression = require('compression');
 var serveStatic = require('serve-static');
@@ -9,7 +10,8 @@ var CASAuthentication = require('cas-authentication');
 // Set up an Express session, which is required for CASAuthentication. 
 app.use( session({
     secret            : 'super secret key',
-    resave            : false,
+    store             : new FileStore,
+    resave            : true,
     saveUninitialized : true,
 }));
 
@@ -34,6 +36,10 @@ var cas;
 
 function debug_bounce(req, res, next) {
 	if (!req.query.hasOwnProperty('debug') ) {
+		console.log('BOUNCE: ' + req.url);
+		console.log(JSON.stringify(req.session.cas_user, null, 4));
+		console.log(JSON.stringify(req.session.cas_userinfo, null, 4));
+		console.log('BOUNCE: ' + JSON.stringify(req.headers, null, 4));
 		return cas.bounce(req, res, next);
 	} else {
 		req.session.cas_user = 'abcd';
@@ -43,6 +49,10 @@ function debug_bounce(req, res, next) {
 
 function debug_block(req, res, next) {
 	if (!req.query.hasOwnProperty('debug') ) {
+		console.log('BLOCK: ' + req.url);
+		console.log(JSON.stringify(req.session.cas_userinfo, null, 4));
+		console.log(JSON.stringify(req.session.cas_user, null, 4));
+		console.log('BLOCK: ' + JSON.stringify(req.headers, null, 4));
 		return cas.block(req, res, next);
 	} else {
 		next();
@@ -125,8 +135,6 @@ app.get('/login', /*cas.bounce || */debug_bounce, function(req, res) {
 	}
 });
 
-
-
 // Error 404
 app.use(function(req, res) {
 	res.status(404);
@@ -137,12 +145,24 @@ app.setServer = function(server) {
 	// Initialize the CASAuthentication when we know our address
 	var casProps = {
 		cas_url     : 'https://auth.dtu.dk/dtu',
-		service_url : 'http://' + server.address().address + ':' + server.address().port,
+//		service_url : 'http://' + server.address().address + ':' + server.address().port,
+    service_url : 'http://localhost:3000',
 		cas_version : '2.0',
+		//is_dev_mode	: true,
+		//dev_mode_user : 'abcd',
 	};
 
 	// Create a new instance of CASAuthentication. 
 	cas = new CASAuthentication(casProps);
-};
+
+	// This route will de-authenticate the client with the Express server and then 
+	// redirect the client to the CAS logout page. 
+	app.get( '/logout', cas.logout, function(req, res) {
+		res.renderDebug('landing.html');
+	}
+);
+
+
+xx};
 
 module.exports = app;
