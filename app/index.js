@@ -143,8 +143,6 @@ app.setServer = function(server) {
 
 	// Create a new instance of CASAuthentication. 
 	cas = new CASAuthentication(casProps);
-
-	console.log(casProps);
 };
 
 module.exports = app;
