@@ -137,7 +137,7 @@ app.setServer = function(server) {
 	// Initialize the CASAuthentication when we know our address
 	var casProps = {
 		cas_url     : 'https://auth.dtu.dk/dtu',
-		service_url : server.address().address + ':' + server.address().port,
+		service_url : 'http://' + server.address().address + ':' + server.address().port,
 		cas_version : '2.0',
 	};
 
