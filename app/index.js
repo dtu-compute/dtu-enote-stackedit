@@ -34,31 +34,20 @@ app.use(compression());
 
 var cas;
 
-function debug_bounce(req, res, next) {
-	if (!req.query.hasOwnProperty('debug') ) {
-		console.log('BOUNCE: ' + req.url);
-		console.log(JSON.stringify(req.session.cas_user, null, 4));
-		console.log(JSON.stringify(req.session.cas_userinfo, null, 4));
-		console.log('BOUNCE: ' + JSON.stringify(req.headers, null, 4));
-		return cas.bounce(req, res, next);
-	} else {
-		req.session.cas_user = 'abcd';
-	}
-	next();
-}
-
-function debug_block(req, res, next) {
-	if (!req.query.hasOwnProperty('debug') ) {
-		console.log('BLOCK: ' + req.url);
-		console.log(JSON.stringify(req.session.cas_userinfo, null, 4));
-		console.log(JSON.stringify(req.session.cas_user, null, 4));
-		console.log('BLOCK: ' + JSON.stringify(req.headers, null, 4));
-		return cas.block(req, res, next);
-	} else {
+function debug_wrapper(f) {
+	return function(req, res, next) {
+		if (!req.query.hasOwnProperty('debug') ) {
+			console.log('BOUNCE: ' + req.url);
+			console.log(JSON.stringify(req.session.cas_user, null, 4));
+			console.log(JSON.stringify(req.session.cas_userinfo, null, 4));
+			console.log('BOUNCE: ' + JSON.stringify(req.headers, null, 4));
+			return f(req, res, next);
+		} else {
+			req.session.cas_user = 'abcd';
+		}
 		next();
 	}
 }
-
 
 app.post('/pdfExport', require('./pdf').export);
 app.post('/sshPublish', require('./ssh').publish);
@@ -83,12 +72,12 @@ app.get('/', function(req, res) {
 });
 
 // Serve editor.html in /viewer
-app.get('/editor', debug_block, function(req, res) {
+app.get('/editor', debug_wrapper(function() { cas.block.apply(cas, arguments); } ), function(req, res) {
 	res.renderDebug('editor.html');
 });
 
 // Serve viewer.html in /viewer
-app.get('/viewer', debug_block, function(req, res) {
+app.get('/viewer', debug_wrapper(function() { cas.block.apply(cas, arguments); } ), function(req, res) {
 	res.renderDebug('viewer.html');
 });
 
@@ -105,7 +94,7 @@ app.get('/data/courses', function(req, res) {
 });
 
 // Serve login.html in /login
-app.get('/login', /*cas.bounce || */debug_bounce, function(req, res) {
+app.get('/login', debug_wrapper(function() { cas.bounce.apply(cas, arguments); } ) , function(req, res) {
 
 		if (courseInfo.hasOwnProperty('error')) {
 			// handle the case where the YAML file failed to parse.
@@ -135,6 +124,12 @@ app.get('/login', /*cas.bounce || */debug_bounce, function(req, res) {
 	}
 });
 
+// This route will de-authenticate the client with the Express server and then 
+// redirect the client to the CAS logout page. 
+app.get( '/logout', debug_wrapper(function() { cas.logout.apply(cas, arguments); } ) , function(req, res) {
+	res.renderDebug('landing.html');
+});
+
 // Error 404
 app.use(function(req, res) {
 	res.status(404);
@@ -154,15 +149,6 @@ app.setServer = function(server) {
 
 	// Create a new instance of CASAuthentication. 
 	cas = new CASAuthentication(casProps);
-
-	// This route will de-authenticate the client with the Express server and then 
-	// redirect the client to the CAS logout page. 
-	app.get( '/logout', cas.logout, function(req, res) {
-		res.renderDebug('landing.html');
-	}
-);
-
-
-xx};
+};
 
 module.exports = app;

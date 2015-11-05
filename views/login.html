@@ -44,24 +44,24 @@
                         <img height="64" data-stackedit-src="logo.svg" />
                     </div>
                     <div class="modal-body">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label class="col-sm-5 control-label" for="select-spell-check-locale">Courses</label>
-                                <% if (courses && courses.length > 0) { %>
-                                <div class="col-sm-6">
-                                    <select id="select-course" class="form-control">
-                                    <% courses.forEach(function(course) { %>
-                                        <option value=<%- course.id %>><%- course.name %></option>
-                                    <% }); %>
-                                    </select>
+                        <% if (courses && courses.length > 0) { %>
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label" for="select-spell-check-locale">Courses</label>
+                                    <div class="col-sm-6">
+                                        <select id="select-course" class="form-control">
+                                        <% courses.forEach(function(course) { %>
+                                            <option value=<%- course.id %>><%- course.name %></option>
+                                        <% }); %>
+                                        </select>
+                                    </div>
                                 </div>
-                                <% } else { %>
-                                <div class="col-sm-6">
-                                    <h3>No courses available.</h3>
-                                </div>
-                                <% } %>
                             </div>
-                        </div>
+                        <% } else { %>
+                            <div class="col-sm-11">
+                                <h3>No courses available.</h3>
+                            </div>
+                        <% } %>
                     </div>
                     <div class="modal-footer">
                         <a href="/editor" id="to-editor" class="btn btn-primary" data-dismiss="modal">Go to Editor</a>
