@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#Date Thu Nov 05 2015 13:58:13 GMT-0800 (PST)
+#Date Mon Nov 09 2015 17:31:56 GMT-0800 (PST)
 
 CACHE:
 .
@@ -62,19 +62,6 @@ res/bower-libs/MathJax/config/TeX-AMS_HTML.js?rev=2.5.0
 res/bower-libs/MathJax/images/CloseX-31.png?rev=2.5.0
 res/bower-libs/MathJax/images/MenuArrow-15.png?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/jax.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/CHTML-preview.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/FontWarnings.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/HelpDialog.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/MatchWebFonts.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/MathEvents.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/MathMenu.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/MathZoom.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/Safe.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/asciimath2jax.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/jsMath2jax.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/mml2jax.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/tex2jax.js?rev=2.5.0
-res/bower-libs/MathJax/extensions/toMathML.js?rev=2.5.0
 res/bower-libs/MathJax/extensions/MathML/content-mathml.js?rev=2.5.0
 res/bower-libs/MathJax/extensions/MathML/mml3.js?rev=2.5.0
 res/bower-libs/MathJax/extensions/HTML-CSS/handle-floats.js?rev=2.5.0
@@ -100,6 +87,19 @@ res/bower-libs/MathJax/extensions/TeX/noErrors.js?rev=2.5.0
 res/bower-libs/MathJax/extensions/TeX/noUndefined.js?rev=2.5.0
 res/bower-libs/MathJax/extensions/TeX/unicode.js?rev=2.5.0
 res/bower-libs/MathJax/extensions/TeX/verb.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/CHTML-preview.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/FontWarnings.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/HelpDialog.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/MatchWebFonts.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/MathEvents.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/MathMenu.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/MathZoom.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/Safe.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/asciimath2jax.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/jsMath2jax.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/mml2jax.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/tex2jax.js?rev=2.5.0
+res/bower-libs/MathJax/extensions/toMathML.js?rev=2.5.0
 res/bower-libs/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_AMS-Regular.woff?rev=2.5.0
 res/bower-libs/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Bold.woff?rev=2.5.0
 res/bower-libs/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff?rev=2.5.0
@@ -170,6 +170,20 @@ res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/MiscTechnical.j
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/PUA.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/SpacingModLetters.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/AMS/Regular/SuppMathOperators.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/BasicLatin.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/Other.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/PUA.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/BasicLatin.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/Other.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/PUA.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Caligraphic/Bold/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Caligraphic/Regular/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Bold/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/BoldItalic/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Italic/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/Arrows.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/CombDiacritMarks.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Bold/CombDiactForSymbols.js?rev=2.5.0
@@ -197,20 +211,6 @@ res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/GeometricShape
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/MiscSymbols.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Main/Regular/SpacingModLetters.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/BasicLatin.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/Other.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Bold/PUA.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/BasicLatin.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/Other.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Fraktur/Regular/PUA.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Caligraphic/Bold/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Caligraphic/Regular/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Bold/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/BoldItalic/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Italic/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Greek/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Script/Regular/BasicLatin.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Script/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Script/Regular/Other.js?rev=2.5.0
@@ -231,12 +231,12 @@ res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Math/BoldItalic/Main.js?rev
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Math/Italic/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Size2/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Size3/Regular/Main.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Size4/Regular/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/WinChrome/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/BasicLatin.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/CombDiacritMarks.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Typewriter/Regular/Other.js?rev=2.5.0
-res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/WinChrome/Regular/Main.js?rev=2.5.0
+res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/Size4/Regular/Main.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/WinIE6/Regular/AMS.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/WinIE6/Regular/Bold.js?rev=2.5.0
 res/bower-libs/MathJax/jax/output/HTML-CSS/fonts/TeX/WinIE6/Regular/Main.js?rev=2.5.0
