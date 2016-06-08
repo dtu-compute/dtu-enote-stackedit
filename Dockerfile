@@ -1,7 +1,15 @@
-# Pull base image.
-FROM node:0.12-onbuild
+FROM fedora:23
 
-# Node base will default the command to `node server.js`.
+RUN dnf -y update
+RUN dnf -y install nodejs npm git
 
-# Expose port.
-EXPOSE 3000
+RUN git clone https://github.com/dtu-compute/stackedit && \
+    cd /stackedit && \
+    rm -rf .git && \
+    npm install
+
+WORKDIR /stackedit
+
+COPY cmd.sh /
+CMD ["/cmd.sh"]
+
