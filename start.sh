@@ -1,3 +1,7 @@
-export SE_HOSTNAME=159.203.120.81
+#!/usr/bin/bash
+
+export SE_HOSTNAME=`hostname`
+echo hostname is `hostname`
+echo $SE_EXTERNAL_ADDRESS
 node server.js &
 
