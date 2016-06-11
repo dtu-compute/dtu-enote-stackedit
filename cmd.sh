@@ -4,7 +4,6 @@
 export SE_HOSTNAME=`hostname`
 echo hostname is `hostname`
 echo $SE_EXTERNAL_ADDRESS
-node server.js &
 
 # db is the hostname of the couchdb host which is specified in docker-compose from linking containers
 DB=db
