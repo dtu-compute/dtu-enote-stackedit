@@ -161,7 +161,7 @@ app.use(function(req, res) {
 app.setServer = function(server) {
   // TODO: SE_EXTERNAL_PROTOCOL?
   var port = process.env.SE_EXTERNAL_PORT || server.address().port;
-  var host = process.env.SE_EXTERNAL_ADDRESS || server.address().address;
+  var host = process.env.SE_EXTERNAL_HOST || server.address().address;
 
   var service_url = 'http://' + host + ':' + port;
 

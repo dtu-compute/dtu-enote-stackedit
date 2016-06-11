@@ -1,8 +1,6 @@
 stackedit:
   build: /docker/stackedit
-    environment:
-      SE_EXTERNAL_ADDRESS: "stackedit.docker.local"
-      SE_EXTERNAL_PORT: "80"
+  env_file: external.env
   ports:
     - "3000:3000"
   # do not change "db". When linking, it becomes the hostname and is used in various scrpts
