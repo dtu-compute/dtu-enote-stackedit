@@ -165,7 +165,7 @@ app.setServer = function(server) {
 
   var service_url = 'http://' + host + ':' + port;
 
-  console.log("Initializing CAS with service URL: " + service_url)
+  console.log("Initializing CAS with service URL: " + service_url);
 
   // Initialize the CASAuthentication when we know our address
   var casProps = {

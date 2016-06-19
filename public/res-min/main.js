@@ -91,7 +91,7 @@ function diff_match_patch() {
  }
  function v(e, t) {
   var n = t.nodeName.toLowerCase();
-  "input" === n && Oe.test(e.type) ? t.checked = e.checked : ("input" === n || "textarea" === n) && (t.defaultValue = e.defaultValue);
+  "input" === n && Oe.test(e.type) ? t.checked = e.checked : "input" !== n && "textarea" !== n || (t.defaultValue = e.defaultValue);
  }
  function b(e, t) {
   if (t in e) return t;
@@ -451,7 +451,7 @@ function diff_match_patch() {
    } catch (r) {
     n = t;
    }
-   return (!n || n.getElementsByTagName("parsererror").length) && oe.error("Invalid XML: " + e), 
+   return n && !n.getElementsByTagName("parsererror").length || oe.error("Invalid XML: " + e), 
    n;
   },
   noop: function() {},
@@ -619,7 +619,7 @@ function diff_match_patch() {
    var i, r, o, a, s, l, c, u = U[e + " "];
    if (u) return t ? 0 : u.slice(0);
    for (s = e, l = [], c = k.preFilter; s; ) {
-    (!i || (r = de.exec(s))) && (r && (s = s.slice(r[0].length) || s), l.push(o = [])), 
+    i && !(r = de.exec(s)) || (r && (s = s.slice(r[0].length) || s), l.push(o = [])), 
     i = !1, (r = pe.exec(s)) && (i = r.shift(), o.push({
      value: i,
      type: r[0].replace(ue, " ")
@@ -659,8 +659,8 @@ function diff_match_patch() {
    } : e[0];
   }
   function g(e, t, n, i, r) {
-   for (var o, a = [], s = 0, l = e.length, c = null != t; l > s; s++) (o = e[s]) && (!n || n(o, i, r)) && (a.push(o), 
-   c && t.push(s));
+   for (var o, a = [], s = 0, l = e.length, c = null != t; l > s; s++) (o = e[s]) && (n && !n(o, i, r) || (a.push(o), 
+   c && t.push(s)));
    return a;
   }
   function v(e, t, n, i, o, a) {
@@ -1425,7 +1425,7 @@ function diff_match_patch() {
    return "boolean" == typeof t && "string" === n ? t ? this.addClass(e) : this.removeClass(e) : oe.isFunction(e) ? this.each(function(n) {
     oe(this).toggleClass(e.call(this, n, this.className, t), t);
    }) : this.each(function() {
-    if ("string" === n) for (var t, i = 0, r = oe(this), o = e.match(se) || []; t = o[i++]; ) r.hasClass(t) ? r.removeClass(t) : r.addClass(t); else (n === H || "boolean" === n) && (this.className && ge.set(this, "__className__", this.className), 
+    if ("string" === n) for (var t, i = 0, r = oe(this), o = e.match(se) || []; t = o[i++]; ) r.hasClass(t) ? r.removeClass(t) : r.addClass(t); else n !== H && "boolean" !== n || (this.className && ge.set(this, "__className__", this.className), 
     this.className = this.className || e === !1 ? "" : ge.get(this, "__className__") || "");
    });
   },
@@ -1600,7 +1600,7 @@ function diff_match_patch() {
    var n, i, r, o, a, s = [], l = ee.call(arguments), c = (ge.get(this, "events") || {})[e.type] || [], u = oe.event.special[e.type] || {};
    if (l[0] = e, e.delegateTarget = this, !u.preDispatch || u.preDispatch.call(this, e) !== !1) {
     for (s = oe.event.handlers.call(this, e, c), n = 0; (o = s[n++]) && !e.isPropagationStopped(); ) for (e.currentTarget = o.elem, 
-    i = 0; (a = o.handlers[i++]) && !e.isImmediatePropagationStopped(); ) (!e.namespace_re || e.namespace_re.test(a.namespace)) && (e.handleObj = a, 
+    i = 0; (a = o.handlers[i++]) && !e.isImmediatePropagationStopped(); ) e.namespace_re && !e.namespace_re.test(a.namespace) || (e.handleObj = a, 
     e.data = a.data, r = ((oe.event.special[a.origType] || {}).handle || a.handler).apply(o.elem, l), 
     r !== t && (e.result = r) === !1 && (e.preventDefault(), e.stopPropagation()));
     return u.postDispatch && u.postDispatch.call(this, e), e.result;
@@ -1718,7 +1718,7 @@ function diff_match_patch() {
    bindType: t,
    handle: function(e) {
     var n, i = this, r = e.relatedTarget, o = e.handleObj;
-    return (!r || r !== i && !oe.contains(i, r)) && (e.type = o.origType, n = o.handler.apply(this, arguments), 
+    return r && (r === i || oe.contains(i, r)) || (e.type = o.origType, n = o.handler.apply(this, arguments), 
     e.type = t), n;
    }
   };
@@ -1764,7 +1764,7 @@ function diff_match_patch() {
     for (o in e) this.off(o, n, e[o]);
     return this;
    }
-   return (n === !1 || "function" == typeof n) && (i = n, n = t), i === !1 && (i = s), 
+   return n !== !1 && "function" != typeof n || (i = n, n = t), i === !1 && (i = s), 
    this.each(function() {
     oe.event.remove(this, e, i, n);
    });
@@ -2323,7 +2323,7 @@ function diff_match_patch() {
     c = e >= 200 && 300 > e || 304 === e, i && (y = M(p, S, i)), y = L(p, y, S, c), 
     c ? (p.ifModified && (w = S.getResponseHeader("Last-Modified"), w && (oe.lastModified[o] = w), 
     w = S.getResponseHeader("etag"), w && (oe.etag[o] = w)), 204 === e || "HEAD" === p.type ? C = "nocontent" : 304 === e ? C = "notmodified" : (C = y.state, 
-    d = y.data, b = y.error, c = !b)) : (b = C, (e || !C) && (C = "error", 0 > e && (e = 0))), 
+    d = y.data, b = y.error, c = !b)) : (b = C, !e && C || (C = "error", 0 > e && (e = 0))), 
     S.status = e, S.statusText = (n || C) + "", c ? m.resolveWith(h, [ d, C, S ]) : m.rejectWith(h, [ S, C, b ]), 
     S.statusCode(v), v = t, u && f.trigger(c ? "ajaxSuccess" : "ajaxError", [ S, p, c ? d : b ]), 
     g.fireWith(h, [ S, C ]), u && (f.trigger("ajaxComplete", [ S, p ]), --oe.active || oe.event.trigger("ajaxStop")));
@@ -2572,7 +2572,7 @@ function diff_match_patch() {
     if (n) a[n] && a[n].stop && r(a[n]); else for (n in a) a[n] && a[n].stop && Mt.test(n) && r(a[n]);
     for (n = o.length; n--; ) o[n].elem !== this || null != e && o[n].queue !== e || (o[n].anim.stop(i), 
     t = !1, o.splice(n, 1));
-    (t || !i) && oe.dequeue(this, e);
+    !t && i || oe.dequeue(this, e);
    });
   },
   finish: function(e) {
@@ -2609,7 +2609,7 @@ function diff_match_patch() {
    easing: n && t || t && !oe.isFunction(t) && t
   };
   return i.duration = oe.fx.off ? 0 : "number" == typeof i.duration ? i.duration : i.duration in oe.fx.speeds ? oe.fx.speeds[i.duration] : oe.fx.speeds._default, 
-  (null == i.queue || i.queue === !0) && (i.queue = "fx"), i.old = i.complete, i.complete = function() {
+  null != i.queue && i.queue !== !0 || (i.queue = "fx"), i.old = i.complete, i.complete = function() {
    oe.isFunction(i.old) && i.old.call(this), i.queue && oe.dequeue(this, i.queue);
   }, i;
  }, oe.easing = {
@@ -3158,16 +3158,16 @@ function diff_match_patch() {
   }
   function l(e, t, n) {
    var r = e.endContainer, o = e.endOffset;
-   (t !== e.startContainer || n !== e.startOffset) && ((V(t) != V(r) || 1 == B.comparePoints(t, n, r, o)) && (r = t, 
+   t === e.startContainer && n === e.startOffset || (V(t) == V(r) && 1 != B.comparePoints(t, n, r, o) || (r = t, 
    o = n), i(e, t, n, r, o));
   }
   function c(e, t, n) {
    var r = e.startContainer, o = e.startOffset;
-   (t !== e.endContainer || n !== e.endOffset) && ((V(t) != V(r) || -1 == B.comparePoints(t, n, r, o)) && (r = t, 
+   t === e.endContainer && n === e.endOffset || (V(t) == V(r) && -1 != B.comparePoints(t, n, r, o) || (r = t, 
    o = n), i(e, r, o, t, n));
   }
   function p(e, t, n) {
-   (t !== e.startContainer || n !== e.startOffset || t !== e.endContainer || n !== e.endOffset) && i(e, t, n, t, n);
+   t === e.startContainer && n === e.startOffset && t === e.endContainer && n === e.endOffset || i(e, t, n, t, n);
   }
   t.prototype = new D(), e.util.extend(t.prototype, {
    setStart: function(e, t) {
@@ -3390,7 +3390,7 @@ function diff_match_patch() {
    if (e === this.endContainer && B.isCharacterDataNode(e)) return 3 == e.nodeType || 4 == e.nodeType ? e.data.slice(this.startOffset, this.endOffset) : "";
    var t = [], n = new f(this, !0);
    return c(n, function(e) {
-    (3 == e.nodeType || 4 == e.nodeType) && t.push(e.data);
+    3 != e.nodeType && 4 != e.nodeType || t.push(e.data);
    }), n.detach(), t.join("");
   },
   compareNode: function(e) {
@@ -4155,11 +4155,11 @@ function diff_match_patch() {
  }, C.size = function(e) {
   return null == e ? 0 : e.length === +e.length ? e.length : C.keys(e).length;
  }, C.first = C.head = C.take = function(e, t, n) {
-  return null == e ? void 0 : null == t || n ? e[0] : s.call(e, 0, t);
+  return null != e ? null == t || n ? e[0] : s.call(e, 0, t) : void 0;
  }, C.initial = function(e, t, n) {
   return s.call(e, 0, e.length - (null == t || n ? 1 : t));
  }, C.last = function(e, t, n) {
-  return null == e ? void 0 : null == t || n ? e[e.length - 1] : s.call(e, Math.max(e.length - t, 0));
+  return null != e ? null == t || n ? e[e.length - 1] : s.call(e, Math.max(e.length - t, 0)) : void 0;
  }, C.rest = C.tail = C.drop = function(e, t, n) {
   return s.call(e, null == t || n ? 1 : t);
  }, C.compact = function(e) {
@@ -4446,9 +4446,10 @@ function diff_match_patch() {
    });
   };
  }), C.result = function(e, t) {
-  if (null == e) return void 0;
-  var n = e[t];
-  return C.isFunction(n) ? n.call(e) : n;
+  if (null != e) {
+   var n = e[t];
+   return C.isFunction(n) ? n.call(e) : n;
+  }
  }, C.mixin = function(e) {
   _(C.functions(e), function(t) {
    var n = C[t] = e[t];
@@ -4593,7 +4594,7 @@ function diff_match_patch() {
    "gdrive" == t.provider && (t.id = t.fileId, t.fileId = void 0, localStorage[e] = JSON.stringify(t));
   });
  }), o = "v6"), "v6" == o && (n = localStorage["file.current"], void 0 !== n && (localStorage[n + ".selectTime"] = new Date().getTime(), 
- localStorage.removeItem("file.current")), o = "v7"), ("v7" == o || "v8" == o || "v9" == o) && (e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
+ localStorage.removeItem("file.current")), o = "v7"), "v7" != o && "v8" != o && "v9" != o || (e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
  delete i.editorFontFamily, delete i.editorFontSize, i.template && (i.template = i.template.replace("http://benweet.github.io/stackedit/css/main-min.css", "http://benweet.github.io/stackedit/res-min/themes/default.css")), 
  localStorage.settings = JSON.stringify(i)), o = "v10"), "v10" == o && (e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
  ((i.extensionSettings || {}).markdownExtra || {}).extensions && i.extensionSettings.markdownExtra.extensions.push("smartypants"), 
@@ -4608,7 +4609,7 @@ function diff_match_patch() {
  e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), delete i.editorFontFamily, 
  delete i.editorFontSize, i.template && (i.template = i.template.replace("https://stackedit.io/res-min/themes/default.css", "https://stackedit.io/res-min/themes/base.css")), 
  i.pdfTemplate && (i.pdfTemplate = i.pdfTemplate.replace("https://stackedit.io/res-min/themes/default.css", "https://stackedit.io/res-min/themes/base.css")), 
- localStorage.settings = JSON.stringify(i)), o = "v12"), ("v12" == o || "v13" == o) && (e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
+ localStorage.settings = JSON.stringify(i)), o = "v12"), "v12" != o && "v13" != o || (e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
  delete i.editorFontFamily, localStorage.settings = JSON.stringify(i)), o = "v14"), 
  "v14" == o && (e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
  i.template && (i.template = i.template.replace("https://stackedit.io/res-min/themes/default.css", "https://stackedit.io/res-min/themes/base.css")), 
@@ -4618,8 +4619,8 @@ function diff_match_patch() {
  localStorage.removeItem("gdrive.lastChangeId")), e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
  ((i.extensionSettings || {}).markdownExtra || {}).extensions && (i.extensionSettings.markdownExtra.extensions.push("newlines"), 
  i.extensionSettings.markdownExtra.extensions.push("strikethrough")), localStorage.settings = JSON.stringify(i)), 
- o = "v16"), ("v16" == o || "v17" == o) && (localStorage.removeItem("focusMode"), 
- localStorage.removeItem("mode"), localStorage.removeItem("gdrive.state"), localStorage.removeItem("google.picasa0.permissions"), 
+ o = "v16"), "v16" != o && "v17" != o || (localStorage.removeItem("focusMode"), localStorage.removeItem("mode"), 
+ localStorage.removeItem("gdrive.state"), localStorage.removeItem("google.picasa0.permissions"), 
  localStorage.removeItem("google.picasa0.userId"), e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
  delete i.shortcuts, delete i.editorFontFamily, delete i.editorFontSize, delete i.maxWidth, 
  localStorage.settings = JSON.stringify(i)), o = "v18"), "v18" == o && (e.has(localStorage, "settings") && (i = JSON.parse(localStorage.settings), 
@@ -4908,7 +4909,7 @@ function diff_match_patch() {
    return n = (n === e ? -1 : n) >>> 0, g.forEach(r, t, function(e) {
     e.index + e[0].length > s && (o.push(r.slice(s, e.index)), e.length > 1 && e.index < r.length && Array.prototype.push.apply(o, e.slice(1)), 
     i = e[0].length, s = e.index + i);
-   }), s === r.length ? (!x.test.call(t, "") || i) && o.push("") : o.push(r.slice(s)), 
+   }), s === r.length ? x.test.call(t, "") && !i || o.push("") : o.push(r.slice(s)), 
    t.lastIndex = a, o.length > n ? o.slice(0, n) : o;
   }, v = g.addToken, v(/\\([ABCE-RTUVXYZaeg-mopqyz]|c(?![A-Za-z])|u(?![\dA-Fa-f]{4})|x(?![\dA-Fa-f]{2}))/, function(e, t) {
    if ("B" === e[1] && t === k) return e[0];
@@ -6455,107 +6456,68 @@ function diff_match_patch() {
 });
 
 var saveAs = saveAs || function(e) {
- if ("undefined" == typeof navigator || !/MSIE [1-9]\./.test(navigator.userAgent)) {
+ if (!("undefined" == typeof e || "undefined" != typeof navigator && /MSIE [1-9]\./.test(navigator.userAgent))) {
   var t = e.document, n = function() {
    return e.URL || e.webkitURL || e;
   }, i = t.createElementNS("http://www.w3.org/1999/xhtml", "a"), r = "download" in i, o = function(e) {
    var t = new MouseEvent("click");
    e.dispatchEvent(t);
-  }, a = /Version\/[\d\.]+.*Safari/.test(navigator.userAgent), s = e.webkitRequestFileSystem, l = e.requestFileSystem || s || e.mozRequestFileSystem, c = function(t) {
+  }, a = /constructor/i.test(e.HTMLElement), s = /CriOS\/[\d]+/.test(navigator.userAgent), l = function(t) {
    (e.setImmediate || e.setTimeout)(function() {
     throw t;
    }, 0);
-  }, u = "application/octet-stream", d = 0, p = 500, h = function(t) {
-   var i = function() {
-    "string" == typeof t ? n().revokeObjectURL(t) : t.remove();
+  }, c = "application/octet-stream", u = 4e4, d = function(e) {
+   var t = function() {
+    "string" == typeof e ? n().revokeObjectURL(e) : e.remove();
    };
-   e.chrome ? i() : setTimeout(i, p);
-  }, f = function(e, t, n) {
+   setTimeout(t, u);
+  }, p = function(e, t, n) {
    t = [].concat(t);
    for (var i = t.length; i--; ) {
     var r = e["on" + t[i]];
     if ("function" == typeof r) try {
      r.call(e, n || e);
     } catch (o) {
-     c(o);
+     l(o);
     }
    }
-  }, m = function(e) {
-   return /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type) ? new Blob([ "\ufeff", e ], {
+  }, h = function(e) {
+   return /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type) ? new Blob([ String.fromCharCode(65279), e ], {
     type: e.type
    }) : e;
-  }, g = function(t, c, p) {
-   p || (t = m(t));
-   var g, v, b, y = this, x = t.type, w = !1, S = function() {
-    f(y, "writestart progress write writeend".split(" "));
-   }, C = function() {
-    if (v && a && "undefined" != typeof FileReader) {
+  }, f = function(t, l, u) {
+   u || (t = h(t));
+   var f, m = this, g = t.type, v = g === c, b = function() {
+    p(m, "writestart progress write writeend".split(" "));
+   }, y = function() {
+    if ((s || v && a) && e.FileReader) {
      var i = new FileReader();
      return i.onloadend = function() {
-      var e = i.result;
-      v.location.href = "data:attachment/file" + e.slice(e.search(/[,;]/)), y.readyState = y.DONE, 
-      S();
-     }, i.readAsDataURL(t), void (y.readyState = y.INIT);
+      var t = s ? i.result : i.result.replace(/^data:[^;]*;/, "data:attachment/file;"), n = e.open(t, "_blank");
+      n || (e.location.href = t), t = void 0, m.readyState = m.DONE, b();
+     }, i.readAsDataURL(t), void (m.readyState = m.INIT);
     }
-    if ((w || !g) && (g = n().createObjectURL(t)), v) v.location.href = g; else {
-     var r = e.open(g, "_blank");
-     void 0 == r && a && (e.location.href = g);
+    if (f || (f = n().createObjectURL(t)), v) e.location.href = f; else {
+     var r = e.open(f, "_blank");
+     r || (e.location.href = f);
     }
-    y.readyState = y.DONE, S(), h(g);
-   }, _ = function(e) {
-    return function() {
-     return y.readyState !== y.DONE ? e.apply(this, arguments) : void 0;
-    };
-   }, k = {
-    create: !0,
-    exclusive: !1
+    m.readyState = m.DONE, b(), d(f);
    };
-   return y.readyState = y.INIT, c || (c = "download"), r ? (g = n().createObjectURL(t), 
-   i.href = g, i.download = c, void setTimeout(function() {
-    o(i), S(), h(g), y.readyState = y.DONE;
-   })) : (e.chrome && x && x !== u && (b = t.slice || t.webkitSlice, t = b.call(t, 0, t.size, u), 
-   w = !0), s && "download" !== c && (c += ".download"), (x === u || s) && (v = e), 
-   l ? (d += t.size, void l(e.TEMPORARY, d, _(function(e) {
-    e.root.getDirectory("saved", k, _(function(e) {
-     var n = function() {
-      e.getFile(c, k, _(function(e) {
-       e.createWriter(_(function(n) {
-        n.onwriteend = function(t) {
-         v.location.href = e.toURL(), y.readyState = y.DONE, f(y, "writeend", t), h(e);
-        }, n.onerror = function() {
-         var e = n.error;
-         e.code !== e.ABORT_ERR && C();
-        }, "writestart progress write abort".split(" ").forEach(function(e) {
-         n["on" + e] = y["on" + e];
-        }), n.write(t), y.abort = function() {
-         n.abort(), y.readyState = y.DONE;
-        }, y.readyState = y.WRITING;
-       }), C);
-      }), C);
-     };
-     e.getFile(c, {
-      create: !1
-     }, _(function(e) {
-      e.remove(), n();
-     }), _(function(e) {
-      e.code === e.NOT_FOUND_ERR ? n() : C();
-     }));
-    }), C);
-   }), C)) : void C());
-  }, v = g.prototype, b = function(e, t, n) {
-   return new g(e, t, n);
+   return m.readyState = m.INIT, r ? (f = n().createObjectURL(t), void setTimeout(function() {
+    i.href = f, i.download = l, o(i), b(), d(f), m.readyState = m.DONE;
+   })) : void y();
+  }, m = f.prototype, g = function(e, t, n) {
+   return new f(e, t || e.name || "download", n);
   };
   return "undefined" != typeof navigator && navigator.msSaveOrOpenBlob ? function(e, t, n) {
-   return n || (e = m(e)), navigator.msSaveOrOpenBlob(e, t || "download");
-  } : (v.abort = function() {
-   var e = this;
-   e.readyState = e.DONE, f(e, "abort");
-  }, v.readyState = v.INIT = 0, v.WRITING = 1, v.DONE = 2, v.error = v.onwritestart = v.onprogress = v.onwrite = v.onabort = v.onerror = v.onwriteend = null, 
-  b);
+   return t = t || e.name || "download", n || (e = h(e)), navigator.msSaveOrOpenBlob(e, t);
+  } : (m.abort = function() {}, m.readyState = m.INIT = 0, m.WRITING = 1, m.DONE = 2, 
+  m.error = m.onwritestart = m.onprogress = m.onwrite = m.onabort = m.onerror = m.onwriteend = null, 
+  g);
  }
 }("undefined" != typeof self && self || "undefined" != typeof window && window || this.content);
 
-"undefined" != typeof module && module.exports ? module.exports.saveAs = saveAs : "undefined" != typeof define && null !== define && null != define.amd && define("FileSaver", [], function() {
+"undefined" != typeof module && module.exports ? module.exports.saveAs = saveAs : "undefined" != typeof define && null !== define && null !== define.amd && define("FileSaver", [], function() {
  return saveAs;
 }), define("utils", [ "jquery", "underscore", "storage", "crel", "xregexp", "stacktrace", "FileSaver" ], function($, _, storage, crel, XRegExp, printStackTrace, saveAs) {
  function jqElt(e) {
@@ -6569,7 +6531,7 @@ var saveAs = saveAs || function(e) {
  function getInputNumValue(e, t, n, i, r) {
   t = jqElt(t);
   var o = utils.getInputTextValue(t, n);
-  return void 0 === o ? void 0 : (o = e ? parseFloat(o) : parseInt(o, 10), isNaN(o) || void 0 !== i && i > o || void 0 !== r && o > r ? void inputError(t, n) : o);
+  if (void 0 !== o) return o = e ? parseFloat(o) : parseInt(o, 10), isNaN(o) || void 0 !== i && i > o || void 0 !== r && o > r ? void inputError(t, n) : o;
  }
  function padNumber(e, t, n) {
   var i = "";
@@ -6634,7 +6596,7 @@ var saveAs = saveAs || function(e) {
   try {
    return decodeURIComponent(t.exec(location.search + location.hash)[1]);
   } catch (n) {
-   return void 0;
+   return;
   }
  }, utils.getInputValue = function(e) {
   return e = jqElt(e), e.val();
@@ -6648,33 +6610,36 @@ var saveAs = saveAs || function(e) {
  utils.getInputRegExpValue = function(e, t) {
   e = jqElt(e);
   var n = utils.getInputTextValue(e, t);
-  if (void 0 === n) return void 0;
-  try {
-   new RegExp(n);
-  } catch (i) {
-   return void inputError(e, t);
+  if (void 0 !== n) {
+   try {
+    new RegExp(n);
+   } catch (i) {
+    return void inputError(e, t);
+   }
+   return n;
   }
-  return n;
  }, utils.getInputJsValue = function(element, event) {
   element = jqElt(element);
   var value = utils.getInputTextValue(element, event);
-  if (void 0 === value) return void 0;
-  try {
-   eval("var test=" + value);
-  } catch (e) {
-   return void inputError(element, event);
+  if (void 0 !== value) {
+   try {
+    eval("var test=" + value);
+   } catch (e) {
+    return void inputError(element, event);
+   }
+   return value;
   }
-  return value;
  }, utils.getInputJSONValue = function(e, t) {
   e = jqElt(e);
   var n = utils.getInputTextValue(e, t);
-  if (void 0 === n) return void 0;
-  try {
-   JSON.parse(n);
-  } catch (i) {
-   return void inputError(e, t);
+  if (void 0 !== n) {
+   try {
+    JSON.parse(n);
+   } catch (i) {
+    return void inputError(e, t);
+   }
+   return n;
   }
-  return n;
  }, utils.getInputChecked = function(e) {
   return e = jqElt(e), e.prop("checked");
  }, utils.setInputChecked = function(e, t) {
@@ -6820,7 +6785,7 @@ var saveAs = saveAs || function(e) {
   try {
    return JSON.parse(storage[e]);
   } catch (t) {
-   return void 0;
+   return;
   }
  };
  var eventList = [];
@@ -7198,13 +7163,24 @@ var saveAs = saveAs || function(e) {
  }
  return e;
 }), define("text", [ "module" ], function(e) {
- var t, n, i, r, o, a = [ "Msxml2.XMLHTTP", "Microsoft.XMLHTTP", "Msxml2.XMLHTTP.4.0" ], s = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im, l = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im, c = "undefined" != typeof location && location.href, u = c && location.protocol && location.protocol.replace(/\:/, ""), d = c && location.hostname, p = c && (location.port || void 0), h = {}, f = e.config && e.config() || {};
- return t = {
-  version: "2.0.14",
+ function t(e, t) {
+  return void 0 === e || "" === e ? t : e;
+ }
+ function n(e, n, i, r) {
+  if (n === r) return !0;
+  if (e === i) {
+   if ("http" === e) return t(n, "80") === t(r, "80");
+   if ("https" === e) return t(n, "443") === t(r, "443");
+  }
+  return !1;
+ }
+ var i, r, o, a, s, l = [ "Msxml2.XMLHTTP", "Microsoft.XMLHTTP", "Msxml2.XMLHTTP.4.0" ], c = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im, u = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im, d = "undefined" != typeof location && location.href, p = d && location.protocol && location.protocol.replace(/\:/, ""), h = d && location.hostname, f = d && (location.port || void 0), m = {}, g = e.config && e.config() || {};
+ return i = {
+  version: "2.0.15",
   strip: function(e) {
    if (e) {
-    e = e.replace(s, "");
-    var t = e.match(l);
+    e = e.replace(c, "");
+    var t = e.match(u);
     t && (e = t[1]);
    } else e = "";
    return e;
@@ -7212,16 +7188,16 @@ var saveAs = saveAs || function(e) {
   jsEscape: function(e) {
    return e.replace(/(['\\])/g, "\\$1").replace(/[\f]/g, "\\f").replace(/[\b]/g, "\\b").replace(/[\n]/g, "\\n").replace(/[\t]/g, "\\t").replace(/[\r]/g, "\\r").replace(/[\u2028]/g, "\\u2028").replace(/[\u2029]/g, "\\u2029");
   },
-  createXhr: f.createXhr || function() {
+  createXhr: g.createXhr || function() {
    var e, t, n;
    if ("undefined" != typeof XMLHttpRequest) return new XMLHttpRequest();
    if ("undefined" != typeof ActiveXObject) for (t = 0; 3 > t; t += 1) {
-    n = a[t];
+    n = l[t];
     try {
      e = new ActiveXObject(n);
     } catch (i) {}
     if (e) {
-     a = [ n ];
+     l = [ n ];
      break;
     }
    }
@@ -7238,59 +7214,59 @@ var saveAs = saveAs || function(e) {
    };
   },
   xdRegExp: /^((\w+)\:)?\/\/([^\/\\]+)/,
-  useXhr: function(e, n, i, r) {
-   var o, a, s, l = t.xdRegExp.exec(e);
-   return l ? (o = l[2], a = l[3], a = a.split(":"), s = a[1], a = a[0], !(o && o !== n || a && a.toLowerCase() !== i.toLowerCase() || (s || a) && s !== r)) : !0;
+  useXhr: function(e, t, r, o) {
+   var a, s, l, c = i.xdRegExp.exec(e);
+   return c ? (a = c[2], s = c[3], s = s.split(":"), l = s[1], s = s[0], (!a || a === t) && (!s || s.toLowerCase() === r.toLowerCase()) && (!l && !s || n(a, l, t, o))) : !0;
   },
-  finishLoad: function(e, n, i, r) {
-   i = n ? t.strip(i) : i, f.isBuild && (h[e] = i), r(i);
+  finishLoad: function(e, t, n, r) {
+   n = t ? i.strip(n) : n, g.isBuild && (m[e] = n), r(n);
   },
-  load: function(e, n, i, r) {
-   if (r && r.isBuild && !r.inlineText) return void i();
-   f.isBuild = r && r.isBuild;
-   var o = t.parseName(e), a = o.moduleName + (o.ext ? "." + o.ext : ""), s = n.toUrl(a), l = f.useXhr || t.useXhr;
-   return 0 === s.indexOf("empty:") ? void i() : void (!c || l(s, u, d, p) ? t.get(s, function(n) {
-    t.finishLoad(e, o.strip, n, i);
+  load: function(e, t, n, r) {
+   if (r && r.isBuild && !r.inlineText) return void n();
+   g.isBuild = r && r.isBuild;
+   var o = i.parseName(e), a = o.moduleName + (o.ext ? "." + o.ext : ""), s = t.toUrl(a), l = g.useXhr || i.useXhr;
+   return 0 === s.indexOf("empty:") ? void n() : void (!d || l(s, p, h, f) ? i.get(s, function(t) {
+    i.finishLoad(e, o.strip, t, n);
    }, function(e) {
-    i.error && i.error(e);
-   }) : n([ a ], function(e) {
-    t.finishLoad(o.moduleName + "." + o.ext, o.strip, e, i);
+    n.error && n.error(e);
+   }) : t([ a ], function(e) {
+    i.finishLoad(o.moduleName + "." + o.ext, o.strip, e, n);
    }));
   },
-  write: function(e, n, i, r) {
-   if (h.hasOwnProperty(n)) {
-    var o = t.jsEscape(h[n]);
-    i.asModule(e + "!" + n, "define(function () { return '" + o + "';});\n");
+  write: function(e, t, n, r) {
+   if (m.hasOwnProperty(t)) {
+    var o = i.jsEscape(m[t]);
+    n.asModule(e + "!" + t, "define(function () { return '" + o + "';});\n");
    }
   },
-  writeFile: function(e, n, i, r, o) {
-   var a = t.parseName(n), s = a.ext ? "." + a.ext : "", l = a.moduleName + s, c = i.toUrl(a.moduleName + s) + ".js";
-   t.load(l, i, function(n) {
-    var i = function(e) {
+  writeFile: function(e, t, n, r, o) {
+   var a = i.parseName(t), s = a.ext ? "." + a.ext : "", l = a.moduleName + s, c = n.toUrl(a.moduleName + s) + ".js";
+   i.load(l, n, function(t) {
+    var n = function(e) {
      return r(c, e);
     };
-    i.asModule = function(e, t) {
+    n.asModule = function(e, t) {
      return r.asModule(e, c, t);
-    }, t.write(e, l, i, o);
+    }, i.write(e, l, n, o);
    }, o);
   }
- }, "node" === f.env || !f.env && "undefined" != typeof process && process.versions && process.versions.node && !process.versions["node-webkit"] && !process.versions["atom-shell"] ? (n = require.nodeRequire("fs"), 
- t.get = function(e, t, i) {
+ }, "node" === g.env || !g.env && "undefined" != typeof process && process.versions && process.versions.node && !process.versions["node-webkit"] && !process.versions["atom-shell"] ? (r = require.nodeRequire("fs"), 
+ i.get = function(e, t, n) {
   try {
-   var r = n.readFileSync(e, "utf8");
-   "\ufeff" === r[0] && (r = r.substring(1)), t(r);
+   var i = r.readFileSync(e, "utf8");
+   "\ufeff" === i[0] && (i = i.substring(1)), t(i);
   } catch (o) {
-   i && i(o);
+   n && n(o);
   }
- }) : "xhr" === f.env || !f.env && t.createXhr() ? t.get = function(e, n, i, r) {
-  var o, a = t.createXhr();
+ }) : "xhr" === g.env || !g.env && i.createXhr() ? i.get = function(e, t, n, r) {
+  var o, a = i.createXhr();
   if (a.open("GET", e, !0), r) for (o in r) r.hasOwnProperty(o) && a.setRequestHeader(o.toLowerCase(), r[o]);
-  f.onXhr && f.onXhr(a, e), a.onreadystatechange = function(t) {
+  g.onXhr && g.onXhr(a, e), a.onreadystatechange = function(i) {
    var r, o;
    4 === a.readyState && (r = a.status || 0, r > 399 && 600 > r ? (o = new Error(e + " HTTP status: " + r), 
-   o.xhr = a, i && i(o)) : n(a.responseText), f.onXhrComplete && f.onXhrComplete(a, e));
+   o.xhr = a, n && n(o)) : t(a.responseText), g.onXhrComplete && g.onXhrComplete(a, e));
   }, a.send(null);
- } : "rhino" === f.env || !f.env && "undefined" != typeof Packages && "undefined" != typeof java ? t.get = function(e, t) {
+ } : "rhino" === g.env || !g.env && "undefined" != typeof Packages && "undefined" != typeof java ? i.get = function(e, t) {
   var n, i, r = "utf-8", o = new java.io.File(e), a = java.lang.System.getProperty("line.separator"), s = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(o), r)), l = "";
   try {
    for (n = new java.lang.StringBuffer(), i = s.readLine(), i && i.length() && 65279 === i.charAt(0) && (i = i.substring(1)), 
@@ -7300,20 +7276,20 @@ var saveAs = saveAs || function(e) {
    s.close();
   }
   t(l);
- } : ("xpconnect" === f.env || !f.env && "undefined" != typeof Components && Components.classes && Components.interfaces) && (i = Components.classes, 
- r = Components.interfaces, Components.utils["import"]("resource://gre/modules/FileUtils.jsm"), 
- o = "@mozilla.org/windows-registry-key;1" in i, t.get = function(e, t) {
-  var n, a, s, l = {};
-  o && (e = e.replace(/\//g, "\\")), s = new FileUtils.File(e);
+ } : ("xpconnect" === g.env || !g.env && "undefined" != typeof Components && Components.classes && Components.interfaces) && (o = Components.classes, 
+ a = Components.interfaces, Components.utils["import"]("resource://gre/modules/FileUtils.jsm"), 
+ s = "@mozilla.org/windows-registry-key;1" in o, i.get = function(e, t) {
+  var n, i, r, l = {};
+  s && (e = e.replace(/\//g, "\\")), r = new FileUtils.File(e);
   try {
-   n = i["@mozilla.org/network/file-input-stream;1"].createInstance(r.nsIFileInputStream), 
-   n.init(s, 1, 0, !1), a = i["@mozilla.org/intl/converter-input-stream;1"].createInstance(r.nsIConverterInputStream), 
-   a.init(n, "utf-8", n.available(), r.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER), 
-   a.readString(n.available(), l), a.close(), n.close(), t(l.value);
+   n = o["@mozilla.org/network/file-input-stream;1"].createInstance(a.nsIFileInputStream), 
+   n.init(r, 1, 0, !1), i = o["@mozilla.org/intl/converter-input-stream;1"].createInstance(a.nsIConverterInputStream), 
+   i.init(n, "utf-8", n.available(), a.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER), 
+   i.readString(n.available(), l), i.close(), n.close(), t(l.value);
   } catch (c) {
-   throw new Error((s && s.path || "") + ": " + c);
+   throw new Error((r && r.path || "") + ": " + c);
   }
- }), t;
+ }), i;
 }), define("text!html/settingsExtensionsAccordion.html", [], function() {
  return '<div class="panel">\n	<div class="accordion-heading">\n		<div class="checkbox pull-right">\n			<label> <input id="input-enable-extension-<%= extensionId %>"\n				type="checkbox"<% if(!isOptional) print(\'disabled\') %>>\n				enabled\n			</label>\n		</div>\n		<a data-toggle="collapse" data-parent=".accordion-extensions"\n			class="accordion-toggle collapsed" href="#accordion-extensions-collapse-<%= extensionId %>">\n			<%= extensionName %> <i class="icon-up-dir"></i></a>\n	</div>\n	<div id="accordion-extensions-collapse-<%= extensionId %>" class="collapse">\n		<div class="accordion-inner clearfix"><%= settingsBlock %></div>\n	</div>\n</div>\n';
 }), function() {
@@ -7995,7 +7971,7 @@ var saveAs = saveAs || function(e) {
    return "'" + e.replace(/'/g, "''") + "'";
   }
  }, YamlEscaper.REGEX_CHARACTER_TO_ESCAPE = "[\\x00-\\x1f]|\xc2\x85|\xc2\xa0|\xe2\x80\xa8|\xe2\x80\xa9", 
- YamlEscaper.escapees = [ "\\\\", '\\"', '"', "\x00", "", "", "", "", "", "", "", "\b", "	", "\n", "", "\f", "\r", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "\xc2\x85", "\xc2\xa0", "\xe2\x80\xa8", "\xe2\x80\xa9" ], 
+ YamlEscaper.escapees = [ "\\\\", '\\"', '"', "\x00", "", "", "", "", "", "", "", "\b", "	", "\n", "\x0B", "\f", "\r", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "\xc2\x85", "\xc2\xa0", "\xe2\x80\xa8", "\xe2\x80\xa9" ], 
  YamlEscaper.escaped = [ '\\"', "\\\\", '\\"', "\\0", "\\x01", "\\x02", "\\x03", "\\x04", "\\x05", "\\x06", "\\a", "\\b", "\\t", "\\n", "\\v", "\\f", "\\r", "\\x0e", "\\x0f", "\\x10", "\\x11", "\\x12", "\\x13", "\\x14", "\\x15", "\\x16", "\\x17", "\\x18", "\\x19", "\\x1a", "\\e", "\\x1c", "\\x1d", "\\x1e", "\\x1f", "\\N", "\\_", "\\L", "\\P" ];
  var a = function() {};
  a.prototype = {
@@ -8281,7 +8257,7 @@ var prettyPrintOne, prettyPrint;
     if (i.test(e.className)) return;
     for (var c = e.firstChild; c; c = c.nextSibling) n(c);
     var u = e.nodeName.toLowerCase();
-    ("br" === u || "li" === u) && (r[s] = "\n", a[s << 1] = o++, a[s++ << 1 | 1] = e);
+    "br" !== u && "li" !== u || (r[s] = "\n", a[s << 1] = o++, a[s++ << 1 | 1] = e);
    } else if (3 == l || 4 == l) {
     var d = e.nodeValue;
     d.length && (d = t ? d.replace(/\r\n?/g, "\n") : d.replace(/[ \t\r\n]+/g, " "), 
@@ -16104,8 +16080,8 @@ function() {
  }, Je.getBBox = function(e) {
   if (this.removed) return {};
   var t = this._;
-  return e ? ((t.dirty || !t.bboxwt) && (this.realPath = ge[this.type](this), t.bboxwt = Te(this.realPath), 
-  t.bboxwt.toString = m, t.dirty = 0), t.bboxwt) : ((t.dirty || t.dirtyT || !t.bbox) && ((t.dirty || !this.realPath) && (t.bboxwt = 0, 
+  return e ? (!t.dirty && t.bboxwt || (this.realPath = ge[this.type](this), t.bboxwt = Te(this.realPath), 
+  t.bboxwt.toString = m, t.dirty = 0), t.bboxwt) : ((t.dirty || t.dirtyT || !t.bbox) && (!t.dirty && this.realPath || (t.bboxwt = 0, 
   this.realPath = ge[this.type](this)), t.bbox = Te(ve(this.realPath, this.matrix)), 
   t.bbox.toString = m, t.dirty = t.dirtyT = 0), t.bbox);
  }, Je.clone = function() {
@@ -16313,7 +16289,7 @@ function() {
   return t.del = this.del, t.times = j.floor($(e, 0)) || 1, t;
  }, n.animation = function(e, t, i, r) {
   if (e instanceof v) return e;
-  (n.is(i, "function") || !i) && (r = r || i || null, i = null), e = Object(e), t = +t || 0;
+  !n.is(i, "function") && i || (r = r || i || null, i = null), e = Object(e), t = +t || 0;
   var o, a, s = {};
   for (a in e) e[k](a) && Z(a) != a && Z(a) + "%" != a && (o = !0, s[a] = e[a]);
   if (o) return i && (s.easing = i), r && (s.callback = r), new v({
@@ -16824,7 +16800,7 @@ function() {
       break;
 
      case "stroke-width":
-      (1 != i._.sx || 1 != i._.sy) && (m /= a(s(i._.sx), s(i._.sy)) || 1), l.setAttribute(f, m), 
+      1 == i._.sx && 1 == i._.sy || (m /= a(s(i._.sx), s(i._.sy)) || 1), l.setAttribute(f, m), 
       u["stroke-dasharray"] && w(i, u["stroke-dasharray"], o), i._.arrows && ("startString" in i._.arrows && y(i, i._.arrows.startString), 
       "endString" in i._.arrows && y(i, i._.arrows.endString, 1));
       break;
@@ -17347,7 +17323,7 @@ function() {
     null != l.opacity || null != l["stroke-width"] || null != l.fill || null != l.src || null != l.stroke || null != l["stroke-width"] || null != l["stroke-opacity"] || null != l["fill-opacity"] || null != l["stroke-dasharray"] || null != l["stroke-miterlimit"] || null != l["stroke-linejoin"] || null != l["stroke-linecap"]) {
      var O = d.getElementsByTagName(c), F = !1;
      if (O = O && O[0], !O && (F = O = M(c)), "image" == r.type && l.src && (O.src = l.src), 
-     l.fill && (O.on = !0), (null == O.on || "none" == l.fill || null === l.fill) && (O.on = !1), 
+     l.fill && (O.on = !0), null != O.on && "none" != l.fill && null !== l.fill || (O.on = !1), 
      O.on && l.fill) {
       var B = t(l.fill).match(n._ISURL);
       if (B) {
@@ -18072,7 +18048,7 @@ function() {
     var f = this.lexer.options && this.lexer.options.ranges;
     "function" == typeof this.yy.parseError ? this.parseError = this.yy.parseError : this.parseError = Object.getPrototypeOf(this).parseError;
     for (var m, g, v, b, y, x, w, S, C, _ = {}; ;) {
-     if (v = i[i.length - 1], this.defaultActions[v] ? b = this.defaultActions[v] : ((null === m || "undefined" == typeof m) && (m = t()), 
+     if (v = i[i.length - 1], this.defaultActions[v] ? b = this.defaultActions[v] : (null !== m && "undefined" != typeof m || (m = t()), 
      b = a[v] && a[v][m]), "undefined" == typeof b || !b.length || !b[0]) {
       var k = "";
       C = [];
@@ -19037,10 +19013,11 @@ function() {
    e.parentNode.removeChild(e);
   }
  }, a.prototype.getAttr = function(e) {
-  if (!this.chart) return void 0;
-  var t, n = this.chart.options ? this.chart.options[e] : void 0, i = this.chart.options.symbols ? this.chart.options.symbols[this.symbolType][e] : void 0;
-  return this.chart.options.flowstate && this.chart.options.flowstate[this.flowstate] && (t = this.chart.options.flowstate[this.flowstate][e]), 
-  t || i || n;
+  if (this.chart) {
+   var t, n = this.chart.options ? this.chart.options[e] : void 0, i = this.chart.options.symbols ? this.chart.options.symbols[this.symbolType][e] : void 0;
+   return this.chart.options.flowstate && this.chart.options.flowstate[this.flowstate] && (t = this.chart.options.flowstate[this.flowstate][e]), 
+   t || i || n;
+  }
  }, a.prototype.initialize = function() {
   this.group.transform("t" + this.getAttr("line-width") + "," + this.getAttr("line-width")), 
   this.width = this.group.getBBox().width, this.height = this.group.getBBox().height;
@@ -19617,7 +19594,7 @@ function() {
   d = e, r();
  };
  var p = function() {
-  u = 0 === t.size(a.publishLocations) ? !1 : !0, r();
+  u = 0 !== t.size(a.publishLocations), r();
  };
  return l.onFileSelected = function(e) {
   a = e, p();
@@ -20446,8 +20423,7 @@ function() {
   }, n.prototype.getState = function(e) {
    var t, n;
    return this._options.storage ? (t = "" + this._options.name + "_" + e, n = this._options.storage.getItem(t)) : null != this._state && (n = this._state[e]), 
-   (void 0 === n || "null" === n) && (n = null), this._options.afterGetState(e, n), 
-   n;
+   void 0 !== n && "null" !== n || (n = null), this._options.afterGetState(e, n), n;
   }, n.prototype.addSteps = function(e) {
    var t, n, i, r;
    for (r = [], n = 0, i = e.length; i > n; n++) t = e[n], r.push(this.addStep(t));
@@ -21744,7 +21720,7 @@ diff_match_patch.Diff, diff_match_patch.prototype.diff_main = function(e, t, n, 
  for (var o = 0, a = 1; ;) {
   var s = e.substring(r - a), l = t.indexOf(s);
   if (-1 == l) return o;
-  a += l, (0 == l || e.substring(r - a) == t.substring(0, a)) && (o = a, a++);
+  a += l, 0 != l && e.substring(r - a) != t.substring(0, a) || (o = a, a++);
  }
 }, diff_match_patch.prototype.diff_halfMatch_ = function(e, t) {
  function n(e, t, n) {
@@ -23989,7 +23965,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
   },
   extendEventData: function(e) {
    var t = this.current, n = t.startEvent;
-   (e.touches.length != n.touches.length || e.touches === n.touches) && (n.touches = [], 
+   e.touches.length == n.touches.length && e.touches !== n.touches || (n.touches = [], 
    f.each(e.touches, function(e) {
     n.touches.push(f.extend({}, e));
    }));
@@ -24117,7 +24093,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
    var n, i, r;
    e.eventType == d ? this.has_moved = !1 : e.eventType != p || this.moved ? e.eventType == h && "touchcancel" != e.srcEvent.type && e.deltaTime < t.options.tap_max_touchtime && !this.has_moved && (n = x.previous, 
    i = n && n.lastEvent && e.timeStamp - n.lastEvent.timeStamp, r = !1, n && "tap" == n.name && i && i < t.options.doubletap_interval && e.distance < t.options.doubletap_distance && (t.trigger("doubletap", e), 
-   r = !0), (!r || t.options.tap_always) && (x.current.name = "tap", t.trigger(x.current.name, e))) : this.has_moved = e.distance > t.options.tap_max_distance;
+   r = !0), r && !t.options.tap_always || (x.current.name = "tap", t.trigger(x.current.name, e))) : this.has_moved = e.distance > t.options.tap_max_distance;
   }
  }, i.gestures.Touch = {
   name: "touch",
@@ -24268,7 +24244,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
  d.prototype.applyCss = function() {
   void 0 !== this.top && (this.elt.style.top = this.top + "px"), void 0 !== this.left && (this.elt.style.left = this.left + "px"), 
   void 0 !== this.bottom && (this.elt.style.bottom = this.bottom + "px"), void 0 !== this.right && (this.elt.style.right = this.right + "px"), 
-  (void 0 !== this.x || void 0 !== this.y) && (this.x = this.x || 0, this.y = this.y || 0, 
+  void 0 === this.x && void 0 === this.y || (this.x = this.x || 0, this.y = this.y || 0, 
   this.elt.style["-webkit-transform"] = "translate(" + this.x + "px, " + this.y + "px)", 
   this.elt.style["-ms-transform"] = "translate(" + this.x + "px, " + this.y + "px)", 
   this.elt.style.transform = "translate(" + this.x + "px, " + this.y + "px)"), U && this.width < this.oldWidth ? z.push(t.bind(function() {
@@ -24293,12 +24269,12 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
   };
  }, d.prototype.initHammer = function(e) {
   this.hammer = l(this.elt, {
-   drag: e ? !0 : !1,
+   drag: !!e,
    drag_max_touches: 0,
    gesture: !1,
    hold: !1,
    release: !1,
-   swipe: e ? !1 : !0,
+   swipe: !e,
    tap: !1,
    touch: !1,
    transform: !1
@@ -24469,7 +24445,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
   }, this.canUndo = function() {
    return c > 1;
   }, this.canRedo = function() {
-   return s[c + 1] ? !0 : !1;
+   return !!s[c + 1];
   }, this.undo = function() {
    a.canUndo() && (n ? (n.restore(), n = null) : (s[c] = new i(t), s[--c].restore(), 
    e && e())), u = "none", t.input.focus(), p();
@@ -24771,7 +24747,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
  }, l.fixEolChars = function(e) {
   return e = e.replace(/\r\n/g, "\n"), e = e.replace(/\r/g, "\n");
  }, l.extendRegExp = function(e, t, n) {
-  (null === t || void 0 === t) && (t = ""), (null === n || void 0 === n) && (n = "");
+  null !== t && void 0 !== t || (t = ""), null !== n && void 0 !== n || (n = "");
   var i, r = e.toString();
   return r = r.replace(/\/([gim]*)$/, function(e, t) {
    return i = t, "";
@@ -25117,7 +25093,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
   document.body.className += " " + l.editMode, window.viewerMode === !0 ? document.body.innerHTML = p : document.body.innerHTML = d, 
   a.init(), e(window).on("offline", T.setOffline), e(window).on("online", b), navigator.onLine === !1 && T.setOffline(), 
   e(document).mousemove(m).keypress(m), r.init(), i.init(), k = window.setInterval(function() {
-   a.updateCurrentTime(), v(), (g() === !0 || window.viewerMode === !0) && (c.onPeriodicRun(), 
+   a.updateCurrentTime(), v(), g() !== !0 && window.viewerMode !== !0 || (c.onPeriodicRun(), 
    y());
   }, 1e3), c.onReady();
  };
@@ -25668,7 +25644,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
  }, g;
 }), define("providers/dropboxProvider", [ "underscore", "utils", "storage", "settings", "classes/Provider", "eventMgr", "fileMgr", "helpers/dropboxHelper" ], function(e, t, n, i, r, o, a, s) {
  function l(e) {
-  return void 0 === e ? void 0 : e.match(/^[^\\<>:"\|?\*]+$/) ? 0 !== e.indexOf("/") ? "/" + e : e : void o.onError('"' + e + '" contains invalid characters.');
+  return void 0 !== e ? e.match(/^[^\\<>:"\|?\*]+$/) ? 0 !== e.indexOf("/") ? "/" + e : e : void o.onError('"' + e + '" contains invalid characters.') : void 0;
  }
  function c(e) {
   return "sync." + p + "." + encodeURIComponent(e.toLowerCase());
@@ -25996,9 +25972,25 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
    a ? (t.isArray(a) || (a = t.chain(("" + a).split(/,/)).compact().unique().value()), 
    a = a.filter(function(e) {
     return t.isString(e) && e.length < 32;
-   }), a = a.slice(0, 16)) : a = void 0, e.ajax({
+   }), a = a.slice(0, 16)) : a = void 0;
+   var c = s.couchdbUrl, d = c.replace("http://", "").replace("https://", "").split(/[/?#]/)[0];
+   console.log(d);
+   var f, m, g = d.split("@");
+   if (g.length > 1) {
+    var v = g[0].split(":");
+    f = v[0], m = v[1], c = c.replace(g[0] + "@", "");
+   }
+   console.log(c);
+   var b = {};
+   f && (b = {
+    username: f,
+    password: m,
+    beforeSend: function(e) {
+     e.setRequestHeader("Authorization", "Basic " + btoa("mlm" + m));
+    }
+   }), console.log(b), e.ajax(t.extend({
     type: "POST",
-    url: s.couchdbUrl,
+    url: c,
     contentType: "application/json",
     dataType: "json",
     data: JSON.stringify({
@@ -26014,7 +26006,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
       }
      }
     })
-   }).done(function(e) {
+   }, b)).done(function(e) {
     p = e, h.chain();
    }).fail(function(e) {
     u(e, h);
@@ -26409,7 +26401,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
    if (401 === t.code || 403 === t.code || "token_refresh_required" == t.code) return e.each(v, function(e) {
     e.setRefreshFlag();
    }), r = "Access to Google account is not authorized.", n.retry(new Error(r), 1);
-   (0 === t.code || -1 === t.code) && (g = !1, e.each(v, function(e) {
+   0 !== t.code && -1 !== t.code || (g = !1, e.each(v, function(e) {
     e.setRefreshFlag();
    }), i.setOffline(), r = "|stopPublish");
   }
@@ -26664,7 +26656,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
    d.setType("flat"), c.addView(d), d = new google.picker.PhotosView(), d.setType("ofuser"), 
    c.addView(d), c.addView(google.picker.ViewId.PHOTO_UPLOAD), e && e.token && c.setOAuthToken(e.token.access_token)), 
    c.setCallback(function(e) {
-    (e.action == google.picker.Action.PICKED || e.action == google.picker.Action.CANCEL) && (e.action == google.picker.Action.PICKED && (l = e.docs), 
+    e.action != google.picker.Action.PICKED && e.action != google.picker.Action.CANCEL || (e.action == google.picker.Action.PICKED && (l = e.docs), 
     a(), u.chain());
    }), s = c.build(), t(r.createBackdrop()).on("click.backdrop", function() {
     a(), u.chain();
@@ -27327,9 +27319,10 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
  }, r.newPublishAttributes = function(t) {
   var n = {};
   if (n.repository = e.getInputTextValue("#input-publish-github-repo", t), n.branch = e.getInputTextValue("#input-publish-github-branch", t), 
-  n.path = e.getInputTextValue("#input-publish-file-path", t), t.isPropagationStopped()) return void 0;
-  var i = n.repository.match(/[\/:]?([^\/:]+)\/([^\/]+?)(?:\.git)?$/);
-  return i && (n.repository = i[2], n.username = i[1]), n;
+  n.path = e.getInputTextValue("#input-publish-file-path", t), !t.isPropagationStopped()) {
+   var i = n.repository.match(/[\/:]?([^\/:]+)\/([^\/]+?)(?:\.git)?$/);
+   return i && (n.repository = i[2], n.username = i[1]), n;
+  }
  }, r;
 }), define("helpers/sshHelper", [ "jquery", "constants", "core", "logger", "eventMgr", "settings", "classes/AsyncTask" ], function(e, t, n, i, r, o, a) {
  function s(e) {

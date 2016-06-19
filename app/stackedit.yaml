@@ -1,13 +1,15 @@
 ---
 02402 - Introduction to Statistics:
-   db: https://enote.compute.dtu.dk:6984/documents02402
+#   db: http://user02402:pass02402@46.101.159.100:3001/db02402
+   db: https://user02402:pass02402@couchdb.docker.local/db02402
    members:
      - abcd
      - mttj
      - perbb
      - iaibrys
 01005 - Lineær Algebra:
-   db: https://enote.compute.dtu.dk:6984/documents01005
+#   db: http://user01005:pass01005@46.101.159.100:3001/db01005
+   db: https://user01005:pass01005@couchdb.docker.local/db01005
    members:
      - abcd
      - ksch
