@@ -63,12 +63,17 @@ define([
       var options = {};
       if (username) {
         options = {
+        /*
           username: username,
           password: password,
           // This the only way I can find that works to do Basic Auth with jQuery Ajax
           beforeSend: function(req) {
             req.setRequestHeader('Authorization', 'Basic ' + btoa('mlm' + password));
           }
+*/
+          headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+          },
         }
       }
 

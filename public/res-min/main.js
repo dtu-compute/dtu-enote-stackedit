@@ -25983,10 +25983,8 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
    console.log(c);
    var b = {};
    f && (b = {
-    username: f,
-    password: m,
-    beforeSend: function(e) {
-     e.setRequestHeader("Authorization", "Basic " + btoa("mlm" + m));
+    headers: {
+     Authorization: "Basic " + btoa(f + ":" + m)
     }
    }), console.log(b), e.ajax(t.extend({
     type: "POST",
