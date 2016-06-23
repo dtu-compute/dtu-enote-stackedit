@@ -25966,29 +25966,30 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
  var d = {}, p = !1;
  return l.addListener("onOfflineChanged", function(e) {
   p = e;
- }), d.uploadDocument = function(n, r, o, a, l, d) {
-  var p, h = new c();
-  h.onRun(function() {
+ }), d.addAuth = function(e) {
+  var n = e.url, i = n.replace("http://", "").replace("https://", "").split(/[/?#]/)[0];
+  console.log(i);
+  var r, o, a = i.split("@");
+  if (a.length > 1) {
+   var s = a[0].split(":");
+   r = s[0], o = s[1], n = n.replace(a[0] + "@", "");
+  }
+  console.log(n);
+  var l = {};
+  return r && (e.url = n, l = {
+   headers: {
+    Authorization: "Basic " + btoa(r + ":" + o)
+   }
+  }), console.log(l), t.extend(e, l);
+ }, d.uploadDocument = function(n, r, o, a, l, p) {
+  var h, f = new c();
+  f.onRun(function() {
    a ? (t.isArray(a) || (a = t.chain(("" + a).split(/,/)).compact().unique().value()), 
    a = a.filter(function(e) {
     return t.isString(e) && e.length < 32;
-   }), a = a.slice(0, 16)) : a = void 0;
-   var c = s.couchdbUrl, d = c.replace("http://", "").replace("https://", "").split(/[/?#]/)[0];
-   console.log(d);
-   var f, m, g = d.split("@");
-   if (g.length > 1) {
-    var v = g[0].split(":");
-    f = v[0], m = v[1], c = c.replace(g[0] + "@", "");
-   }
-   console.log(c);
-   var b = {};
-   f && (b = {
-    headers: {
-     Authorization: "Basic " + btoa(f + ":" + m)
-    }
-   }), console.log(b), e.ajax(t.extend({
+   }), a = a.slice(0, 16)) : a = void 0, e.ajax(d.addAuth({
     type: "POST",
-    url: c,
+    url: s.couchdbUrl,
     contentType: "application/json",
     dataType: "json",
     data: JSON.stringify({
@@ -26004,20 +26005,20 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
       }
      }
     })
-   }, b)).done(function(e) {
-    p = e, h.chain();
+   })).done(function(e) {
+    h = e, f.chain();
    }).fail(function(e) {
-    u(e, h);
+    u(e, f);
    });
-  }), h.onSuccess(function() {
-   d(void 0, p);
-  }), h.onError(function(e) {
-   d(e);
-  }), h.enqueue();
+  }), f.onSuccess(function() {
+   p(void 0, h);
+  }), f.onError(function(e) {
+   p(e);
+  }), f.enqueue();
  }, d.checkChanges = function(n, i, r) {
   var o, a = n || 0, l = new c();
   l.onRun(function() {
-   e.ajax({
+   e.ajax(d.addAuth({
     type: "POST",
     url: s.couchdbUrl + "/_changes?" + e.param({
      filter: "_doc_ids",
@@ -26030,7 +26031,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
     data: JSON.stringify({
      doc_ids: Object.keys(i)
     })
-   }).done(function(e) {
+   })).done(function(e) {
     a = e.last_seq, o = t.map(e.results, function(e) {
      return e.deleted ? {
       _id: e.id,
@@ -26052,7 +26053,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
     if (0 === n.length) return o.chain();
     var a = n[0];
     return r.push(a), a.deleted || void 0 !== ((a._attachments || {}).content || {}).data ? (n.shift(), 
-    o.chain(i)) : void e.ajax({
+    o.chain(i)) : void e.ajax(d.addAuth({
      url: s.couchdbUrl + "/" + encodeURIComponent(a._id),
      headers: {
       Accept: "application/json"
@@ -26062,7 +26063,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
      data: {
       attachments: !0
      }
-    }).done(function(e) {
+    })).done(function(e) {
      n.shift(), t.extend(a, e), o.chain(i);
     }).fail(function(e) {
      u(e, o);
@@ -26077,19 +26078,19 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
  }, d.listDocuments = function(n, i, r) {
   var o, l = new c();
   l.onRun(function() {
-   var r = "/_design/by_" + (n ? "tag_and_" : "") + "update/_view/default", c = n ? JSON.stringify([ n, i || [] ]) : i, d = n ? JSON.stringify([ n ]) : void 0;
-   e.ajax({
+   var r = "/_design/by_" + (n ? "tag_and_" : "") + "update/_view/default", c = n ? JSON.stringify([ n, i || [] ]) : i, p = n ? JSON.stringify([ n ]) : void 0;
+   e.ajax(d.addAuth({
     url: s.couchdbUrl + r,
     data: {
      start_key: c,
-     end_key: d,
+     end_key: p,
      descending: !0,
      include_docs: !0,
      limit: a.COUCHDB_PAGE_SIZE,
      reduce: !1
     },
     dataType: "json"
-   }).done(function(e) {
+   })).done(function(e) {
     o = t.pluck(e.rows, "doc"), l.chain();
    }).fail(function(e) {
     u(e, l);
@@ -26102,7 +26103,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
  }, d.deleteDocuments = function(t) {
   var n = new c();
   n.onRun(function() {
-   e.ajax({
+   e.ajax(d.addAuth({
     type: "POST",
     url: s.couchdbUrl + "/_bulk_docs",
     data: JSON.stringify({
@@ -26116,7 +26117,7 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
     }),
     contentType: "application/json",
     dataType: "json"
-   }).done(function() {
+   })).done(function() {
     n.chain();
    }).fail(function(e) {
     u(e, n);

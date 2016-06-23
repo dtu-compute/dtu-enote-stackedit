@@ -19,6 +19,42 @@ define([
     isOffline = isOfflineParam;
   });
 
+  couchdbHelper.addAuth = function(ajax_options) {
+
+    //var url = "http://user01005:pass01005@46.101.159.100:3001/db01005"
+    var url = ajax_options.url
+    var domain = url.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
+
+    console.log(domain)
+
+    var user_and_password = domain.split('@')
+
+    var username
+    var password
+    if (user_and_password.length > 1) {
+      var up = user_and_password[0].split(':')
+      username = up[0]
+      password = up[1]
+      url = url.replace(user_and_password[0] + '@', '')
+    }
+
+    console.log(url);
+
+    var auth_options = {};
+    if (username) {
+      ajax_options.url = url;
+      auth_options = {
+        headers: {
+          "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+      }
+    }
+
+    console.log(auth_options);
+
+    return _.extend(ajax_options, auth_options);
+  },
+
   couchdbHelper.uploadDocument = function(documentId, title, content, tags, rev, callback) {
     var result;
     var task = new AsyncTask();
@@ -41,47 +77,9 @@ define([
         tags = undefined;
       }
 
-      //var url = "http://user01005:pass01005@46.101.159.100:3001/db01005"
-      var url = settings.couchdbUrl
-      var domain = url.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
-
-      console.log(domain)
-
-      var x = domain.split('@')
-
-      var username
-      var password
-      if (x.length > 1) {
-        var up = x[0].split(':')
-        username = up[0]
-        password = up[1]
-        url = url.replace(x[0] + '@', '')
-      }
-
-      console.log(url);
-
-      var options = {};
-      if (username) {
-        options = {
-        /*
-          username: username,
-          password: password,
-          // This the only way I can find that works to do Basic Auth with jQuery Ajax
-          beforeSend: function(req) {
-            req.setRequestHeader('Authorization', 'Basic ' + btoa('mlm' + password));
-          }
-*/
-          headers: {
-            "Authorization": "Basic " + btoa(username + ":" + password)
-          },
-        }
-      }
-
-      console.log(options);
-
-      $.ajax(_.extend({
+      $.ajax(couchdbHelper.addAuth({
         type: 'POST',
-        url: url,
+        url: settings.couchdbUrl,
         contentType: 'application/json',
         dataType: 'json',
         /* jsonp for cross domain */
@@ -98,7 +96,7 @@ define([
             }
           }
         })
-      }, options)).done(function(data) {
+      })).done(function(data) {
         result = data;
         task.chain();
       }).fail(function(jqXHR) {
@@ -119,7 +117,7 @@ define([
     var newChangeId = lastChangeId || 0;
     var task = new AsyncTask();
     task.onRun(function() {
-      $.ajax({
+      $.ajax(couchdbHelper.addAuth({
         type: 'POST',
         url: settings.couchdbUrl + '/_changes?' + $.param({
           filter: '_doc_ids',
@@ -132,7 +130,7 @@ define([
         data: JSON.stringify({
           doc_ids: Object.keys(syncLocations)
         })
-      }).done(function(data) {
+      })).done(function(data) {
         newChangeId = data.last_seq;
         changes = _.map(data.results, function(result) {
           return result.deleted ? {
@@ -168,7 +166,7 @@ define([
           documents.shift();
           return task.chain(recursiveDownloadContent);
         }
-        $.ajax({
+        $.ajax(couchdbHelper.addAuth({
           url: settings.couchdbUrl + '/' + encodeURIComponent(document._id),
           headers: {
             Accept: 'application/json'
@@ -178,7 +176,7 @@ define([
           data: {
             attachments: true
           }
-        }).done(function(doc) {
+        })).done(function(doc) {
           documents.shift();
           _.extend(document, doc);
           task.chain(recursiveDownloadContent);
@@ -210,7 +208,7 @@ define([
       var endKey = tag ? JSON.stringify([
         tag
       ]) : undefined;
-      $.ajax({
+      $.ajax(couchdbHelper.addAuth({
         url: settings.couchdbUrl + ddoc,
         data: {
           start_key: startKey,
@@ -221,7 +219,7 @@ define([
           reduce: false
         },
         dataType: 'json'
-      }).done(function(data) {
+      })).done(function(data) {
         result = _.pluck(data.rows, 'doc');
         task.chain();
       }).fail(function(jqXHR) {
@@ -240,7 +238,7 @@ define([
   couchdbHelper.deleteDocuments = function(docs) {
     var task = new AsyncTask();
     task.onRun(function() {
-      $.ajax({
+      $.ajax(couchdbHelper.addAuth({
         type: 'POST',
         url: settings.couchdbUrl + '/_bulk_docs',
         data: JSON.stringify({
@@ -254,7 +252,7 @@ define([
         }),
         contentType: 'application/json',
         dataType: 'json'
-      }).done(function() {
+      })).done(function() {
         task.chain();
       }).fail(function(jqXHR) {
         handleError(jqXHR, task);
