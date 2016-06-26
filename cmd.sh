@@ -1,9 +1,5 @@
 #!/usr/bin/bash
 
-export SE_HOSTNAME=`hostname`
-echo hostname is `hostname`
-echo $SE_EXTERNAL_ADDRESS
-
 # db is the hostname of the couchdb host which is specified in docker-compose from linking containers
 DB=db
 
@@ -16,9 +12,10 @@ while true; do
     sleep 5
 done
 
+
 # ignore self signed cert warning
 export NODE_TLS_REJECT_UNAUTHORIZED=0
-node couchdb/setup.js https://$DB:6984/documents
+
 
 echo create master admin user
 #curl -X PUT http://$DB:5984/_config/admins/admin -d '"'admin'"'
@@ -38,6 +35,19 @@ do
   echo Create course DB: $i
 
   curl --insecure -X PUT https://user$i:pass$i@$DB:6984/db$i
+
+  echo Running couchdb setup on $i
+
+  node couchdb/setup.js https://user$i:pass$i@$DB:6984/db$i
+
+  if [ $? -eq 0 ]
+  then
+    echo "Successfully set up couchdb"
+  else
+    echo "Could set up couchdb" >&2
+    exit
+  fi
+
 done
 
 node server.js

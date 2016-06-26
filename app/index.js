@@ -159,11 +159,11 @@ app.use(function(req, res) {
 });
 
 app.setServer = function(server) {
-  // TODO: SE_EXTERNAL_PROTOCOL?
+  var protocol = process.env.SE_EXTERNAL_PROTOCOL
   var port = process.env.SE_EXTERNAL_PORT || server.address().port;
   var host = process.env.SE_EXTERNAL_HOST || server.address().address;
 
-  var service_url = 'http://' + host + ':' + port;
+  var service_url = protocol + '://' + host + ':' + port;
 
   console.log("Initializing CAS with service URL: " + service_url);
 
