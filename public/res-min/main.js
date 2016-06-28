@@ -25977,9 +25977,9 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
   console.log(n);
   var l = {};
   return r && (e.url = n, l = {
-   headers: {
+   headers: $_.extend({
     Authorization: "Basic " + btoa(r + ":" + o)
-   }
+   }, e.headers || {})
   }), console.log(l), t.extend(e, l);
  }, d.uploadDocument = function(n, r, o, a, l, p) {
   var h, f = new c();
