@@ -44,9 +44,9 @@ define([
     if (username) {
       ajax_options.url = url;
       auth_options = {
-        headers: {
+        headers: $_.extend({
           "Authorization": "Basic " + btoa(username + ":" + password)
-        },
+        }, ajax_options.headers || {}),
       }
     }
 
