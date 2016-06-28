@@ -4051,7 +4051,7 @@ if (function(t, e) {
   fontSizeRatio: 1,
   maxWidthRatio: 1,
   cursorFocusRatio: .5,
-  defaultContent: "\n\n\n> Written with [StackEdit](" + e.MAIN_URL + ").",
+  defaultContent: "",
   commitMsg: "Published with " + e.MAIN_URL,
   conflictMode: "merge",
   markdownMimeType: "text/plain",
