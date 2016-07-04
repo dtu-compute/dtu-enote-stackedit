@@ -5,6 +5,7 @@ var app = express();
 var compression = require('compression');
 var serveStatic = require('serve-static');
 var yamlJs = require('yamljs');
+var __ = require('underscore');
 var CASAuthentication = require('cas-authentication');
 
 // Set up an Express session, which is required for CASAuthentication. 
@@ -85,17 +86,39 @@ app.get('/viewer', debug_wrapper(function() {
   res.renderDebug('viewer.html');
 });
 
-
+var couseInfoRootPath = '/'
 var courseInfo = {
   error: 'uninitialized'
 };
 try {
-  courseInfo = yamlJs.load('./app/stackedit.yaml');
+  courseInfo = yamlJs.load(couseInfoRootPath + 'dtu-data/courses.yml');
+
+  __.each(courseInfo, function(info, course) {
+    var users = []
+    if (info.hasOwnProperty('groups')) {
+      courseInfo[course]['groups'] = yamlJs.load(couseInfoRootPath + info.groups);
+
+      __.each(courseInfo[course]['groups'], function(group_info, group) {
+
+        __.each(courseInfo[course]['groups'][group], function(authority, user) {
+          console.log(authority);
+          if (authority == 'Administrator') {
+            users.push(user);
+          }
+        })
+      })
+    }
+
+    courseInfo[course]['members'] = __.uniq(users);
+  })
 } catch (e) {
   courseInfo = {
     error: e
   };
 }
+
+console.log(courseInfo)
+
 
 app.get('/data/courses', function(req, res) {
   res.json(courseInfo);
