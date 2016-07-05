@@ -1,7 +1,8 @@
 #!/usr/bin/bash
 
+
 # db is the hostname of the couchdb host which is specified in docker-compose from linking containers
-DB=db
+DB=couchdb
 
 while true; do
     if curl  --insecure -k https://$DB:6984 | /usr/bin/grep -q Welcome; then
@@ -17,38 +18,13 @@ done
 export NODE_TLS_REJECT_UNAUTHORIZED=0
 
 
-echo create master admin user
-#curl -X PUT http://$DB:5984/_config/admins/admin -d '"'admin'"'
-curl  --insecure -X PUT https://$DB:6984/_config/admins/admin -d '"'admin'"'
+#echo create master admin user
+# handled in local.ini of couchdb so there's never an admin party
+#curl  --insecure -X PUT https://$DB:6984/_config/admins/dtuadmin -d '"'Aevee7Le'"'
 
-echo create databases/documents
-echo each course have their own
-courses=( '02402' '01005' )
+echo create databases/documents...
+node config-dtu.js
 
-for i in "${courses[@]}"
-do
-  echo Create course admin user: $i
-
-  echo curl  --insecure -X PUT https://admin:admin@$DB:6984/_config/admins/user$i -d '"'pass$i'"'
-  curl  --insecure -X PUT https://admin:admin@$DB:6984/_config/admins/user$i -d '"'pass$i'"'
-
-  echo Create course DB: $i
-
-  curl --insecure -X PUT https://user$i:pass$i@$DB:6984/db$i
-
-  echo Running couchdb setup on $i
-
-  node couchdb/setup.js https://user$i:pass$i@$DB:6984/db$i
-
-  if [ $? -eq 0 ]
-  then
-    echo "Successfully set up couchdb"
-  else
-    echo "Could set up couchdb" >&2
-    exit
-  fi
-
-done
-
+echo starting server...
 node server.js
 

@@ -101,7 +101,6 @@ try {
       __.each(courseInfo[course]['groups'], function(group_info, group) {
 
         __.each(courseInfo[course]['groups'][group], function(authority, user) {
-          console.log(authority);
           if (authority == 'Administrator') {
             users.push(user);
           }
@@ -117,6 +116,7 @@ try {
   };
 }
 
+console.log("STACKEDIT startup")
 console.log(courseInfo)
 
 
