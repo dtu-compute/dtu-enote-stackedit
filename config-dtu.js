@@ -11,10 +11,16 @@ function run_cmd(cmd, args) {
     var child = runsync.spawn(cmd, args, {
       encoding: "utf8"
     });
-    console.log("ended: " + cmd)
+    console.log("ended: " + cmd + "EXIT STATUS: " + child.status)
     console.log(child.stdout);
-    console.log("ERR" + child.stderr);
-    console.log("EXIT STATUS: " + child.status)
+    if (child.stderr) {
+      console.log("ERR" + child.stderr);
+    };
+    if (child.status == 0) {
+      return child.stdout
+    } else {
+      return undefined
+    }
 
   } catch (e) {
     console.error(e)
@@ -41,14 +47,25 @@ try {
 
       db_url.host = "couchdb:6984";
 
-      console.log("creating the user " + username + "...")
-      var args = ["--insecure", "-X", "PUT", "https://dtuadmin:Aevee7Le@" + db_url.host + "/_config/admins/" + username, "-d", "\"" + password + "\""];
-      run_cmd("curl", args);
+      console.log("checking to see if db/user exists for " + course + " ...")
 
-      console.log("creating the db...")
-      args = ["couchdb/setup.js", docker_url];
-      run_cmd("node", args);
+      var args = ["--insecure", docker_url + '/_design/by_update/_view/default?descending=true&include_docs=true&limit=25&reduce=false', '-H', 'Accept: application/json, text/javascript; q=0.01', '-H', 'Accept-Encoding: identity',
+        //'-H', Authorization: Basic dXNlcjAxMDA1OnBhc3MwMTAwNQ=='
+      ]
+      result = run_cmd("curl", args);
+      if (result != undefined && !result.hasOwnProperty('error')) {
+        console.log("DB/user exists! skipping...")
+      } else {
+        console.log("creating the user " + username + "...")
+        args = ["--insecure", "-X", "PUT", "https://dtuadmin:Aevee7Le@" + db_url.host + "/_config/admins/" + username, "-d", "\"" + password + "\""];
+        run_cmd("curl", args);
 
+        console.log("creating the db...")
+        args = ["couchdb/setup.js", docker_url];
+        run_cmd("node", args);
+
+
+      }
     }
   })
 } catch (e) {
