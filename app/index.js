@@ -51,6 +51,7 @@ function debug_wrapper(f) {
 }
 
 app.post('/pdfExport', require('./pdf').export);
+app.post('/dtuCourseExport', require('./dtucourse').export);
 app.post('/sshPublish', require('./ssh').publish);
 app.post('/picasaImportImg', require('./picasa').importImg);
 app.get('/downloadImport', require('./download').importPublic);
@@ -86,7 +87,7 @@ app.get('/viewer', debug_wrapper(function() {
   res.renderDebug('viewer.html');
 });
 
-var couseInfoRootPath = '/'
+var couseInfoRootPath = '../'
 var courseInfo = {
   error: 'uninitialized'
 };

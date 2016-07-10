@@ -22,7 +22,7 @@ if (!process.env.NO_CLUSTER && cluster.isMaster) {
   };
 
   var port = process.env.PORT || 3000;
-  var host = process.env.SE_HOSTNAME || null;
+  var host = process.env.SE_HOSTNAME || 'localhost';
 
   console.log('Server address: ' + host + ':' + port);
 
