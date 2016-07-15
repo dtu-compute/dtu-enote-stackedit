@@ -2,6 +2,9 @@ var yamlJs = require('yamljs');
 var __ = require('underscore');
 var url = require('url');
 var runsync = require('runsync'); // use this instead of child_process since we're bound to node 0.10.x
+var glob = require('glob');
+uploadAllDocs = require("./upload-all-docs.js");
+
 
 function run_cmd(cmd, args) {
 
@@ -28,12 +31,12 @@ function run_cmd(cmd, args) {
 }
 
 
-var couseInfoRootPath = '../'
+var courseInfoRootPath = '/'
 var courseInfo = {
   error: 'uninitialized'
 };
 try {
-  courseInfo = yamlJs.load(couseInfoRootPath + 'dtu-data/courses.yml');
+  courseInfo = yamlJs.load(courseInfoRootPath + 'dtu-data/courses.yml');
 
   __.each(courseInfo, function(info, course) {
     var users = []
@@ -44,6 +47,7 @@ try {
         password = up[1];
 
       var docker_url = info.db.replace(db_url.host, "couchdb:6984")
+      var docker_url_comps = url.parse(docker_url)
 
       db_url.host = "couchdb:6984";
 
@@ -53,6 +57,7 @@ try {
         //'-H', Authorization: Basic dXNlcjAxMDA1OnBhc3MwMTAwNQ=='
       ]
       result = run_cmd("curl", args);
+      result = result ? JSON.parse(result) : undefined;
       if (result != undefined && !result.hasOwnProperty('error')) {
         console.log("DB/user exists! skipping...")
       } else {
@@ -61,15 +66,23 @@ try {
         run_cmd("curl", args);
 
         console.log("creating the db...")
+        args = ["--insecure", "-X", "PUT", docker_url];
+        run_cmd("curl", args);
+        //  curl --insecure -X PUT https://user$i:pass$i@$DB:6984/db$i
+
+        console.log("configuring the db...")
         args = ["couchdb/setup.js", docker_url];
         run_cmd("node", args);
 
+        console.log("populating existing files...");
+        uploadAllDocs(docker_url.replace(docker_url_comps.pathname, ""), db_url.path.replace("/", ""), courseInfoRootPath + 'dtu-data/' + course + '-content');
+
+        args = ["couchdb/setup.js", docker_url];
+        run_cmd("node", args);
 
       }
     }
   })
 } catch (e) {
-  courseInfo = {
-    error: e
-  };
+  console.error(e)
 }

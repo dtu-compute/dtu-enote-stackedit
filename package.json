@@ -16,6 +16,8 @@
     "ejs": "~0.8.4",
     "express": "^4.8.5",
     "express-session": "^1.12.1",
+    "glob": "^7.0.5",
+    "nano": "^6.2.0",
     "request": "~2.40.0",
     "runsync": "^0.1.8",
     "serve-static": "^1.6.5",
