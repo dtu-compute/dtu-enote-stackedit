@@ -24,7 +24,6 @@ function downloadFiles(url, coursedb, folder) {
   };
 
   db.list({
-    limit: 10
   }, function(err, body) {
     if (!err) {
       ids = __.pluck(body.rows.filter(function(doc) {
@@ -38,11 +37,14 @@ function downloadFiles(url, coursedb, folder) {
         }, function(err, doc_body) {
           if (!err) {
 
+	    console.log('Loading '+doc_body.title+' id ' + id)
+
             db.attachment.get(id, "content", function(err, content_body) {
               if (!err) {
                 var file_name = path.join(folder, doc_body.title + ".md");
 
                 console.log(file_name)
+	    console.log('Loading '+doc_body.title+' id ' + id)
 
                 fs.writeFileSync(file_name, content_body)
               } else {
