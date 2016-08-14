@@ -90,13 +90,15 @@ var couseInfoRootPath = '/data/config/'
 var courseInfo = {
   error: 'uninitialized'
 };
+var fileName;
 try {
   courseInfo = yamlJs.load(couseInfoRootPath + 'courses.yaml');
 
   __.each(courseInfo, function(info, course) {
     var users = []
     if (info.hasOwnProperty('groups')) {
-      courseInfo[course]['groups'] = yamlJs.load(couseInfoRootPath + info.groups);
+      fileName = courseInfoRootPath + info.groups;
+      courseInfo[course]['groups'] = yamlJs.load(fileName);
 
       __.each(courseInfo[course]['groups'], function(group_info, group) {
 
@@ -112,7 +114,8 @@ try {
   })
 } catch (e) {
   courseInfo = {
-    error: e
+    error: e,
+    fileName: fileName
   };
 }
 

@@ -18,7 +18,7 @@ COPY . /stackedit
 
 WORKDIR /stackedit
 
-RUN rm -rf node_modules
+#RUN rm -rf node_modules
 
 RUN npm install
 RUN npm install -g node-gyp
