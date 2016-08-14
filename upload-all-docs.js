@@ -36,6 +36,8 @@ function uploadAllDocs(url, coursedb, folder) {
         var updated = new Date(fs.statSync(fname).mtime).getTime();
         var b64 = new Buffer(fs.readFileSync(fname)).toString('base64');
 
+	console.log('uploading ' + title)
+
         var doc = {
           "_id": id(),
           "title": title,

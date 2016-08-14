@@ -86,12 +86,12 @@ app.get('/viewer', debug_wrapper(function() {
   res.renderDebug('viewer.html');
 });
 
-var couseInfoRootPath = '/dtu-data/'
+var couseInfoRootPath = '/data/config/'
 var courseInfo = {
   error: 'uninitialized'
 };
 try {
-  courseInfo = yamlJs.load(couseInfoRootPath + 'courses.yml');
+  courseInfo = yamlJs.load(couseInfoRootPath + 'courses.yaml');
 
   __.each(courseInfo, function(info, course) {
     var users = []

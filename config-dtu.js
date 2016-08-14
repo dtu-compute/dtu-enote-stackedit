@@ -31,12 +31,12 @@ function run_cmd(cmd, args) {
 }
 
 
-var courseInfoRootPath = '/'
+var courseInfoRootPath = '/data/config'
 var courseInfo = {
   error: 'uninitialized'
 };
 try {
-  courseInfo = yamlJs.load(courseInfoRootPath + 'dtu-data/courses.yml');
+  courseInfo = yamlJs.load(courseInfoRootPath + '/couchdb.yaml');
 
   __.each(courseInfo, function(info, course) {
     var users = []
