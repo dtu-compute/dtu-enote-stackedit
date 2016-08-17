@@ -86,13 +86,13 @@ app.get('/viewer', debug_wrapper(function() {
   res.renderDebug('viewer.html');
 });
 
-var couseInfoRootPath = '/data/config/'
+var courseInfoRootPath = '/data/config/'
 var courseInfo = {
   error: 'uninitialized'
 };
 var fileName;
 try {
-  courseInfo = yamlJs.load(couseInfoRootPath + 'courses.yaml');
+  courseInfo = yamlJs.load(courseInfoRootPath + 'courses.yaml');
 
   __.each(courseInfo, function(info, course) {
     var users = []
