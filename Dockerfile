@@ -14,18 +14,21 @@ RUN dnf -y install net-tools
 
 
 RUN mkdir /stackedit
-COPY . /stackedit
-
 WORKDIR /stackedit
 
-#RUN rm -rf node_modules
+COPY ./package.json /stackedit
 
 RUN npm install
 RUN npm install -g node-gyp
 RUN npm install -g runsync
 
+COPY ./bower.json /stackedit
+COPY ./.bowerrc /stackedit
+
 RUN npm install -g bower
 RUN bower install --allow-root
+
+COPY . /stackedit
 
 RUN npm install -g gulp
 RUN gulp default

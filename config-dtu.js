@@ -34,9 +34,20 @@ var couchdbInfoRootPath = '/data/config';
 var couchdbInfo = {
   error: 'uninitialized'
 };
+var docker_host = "couchdb:6984";
 try {
   couchdbInfo = yamlJs.load(couchdbInfoRootPath + '/couchdb.yaml');
 
+  var db_admin_url = url.parse(couchdbInfo._admin.db);
+  var docker_admin_url = couchdbInfo._admin.db.replace(db_admin_url.host, docker_host);
+
+  console.log("USERS/DBS BEFORE SETUP");
+  var get_users_args = ["--insecure", docker_admin_url + '/_users/_all_docs', '-H', 'Accept: application/json, text/javascript; q=0.01', '-H', 'Accept-Encoding: identity'];
+  var get_admins_args = ["--insecure", docker_admin_url + '/_config/admins', '-H', 'Accept: application/json, text/javascript; q=0.01', '-H', 'Accept-Encoding: identity'];
+  var get_dbs_args = ["--insecure", docker_admin_url + '/_all_dbs', '-H', 'Accept: application/json, text/javascript; q=0.01', '-H', 'Accept-Encoding: identity'];
+  run_cmd("curl", get_users_args);
+  run_cmd("curl", get_admins_args);
+  run_cmd("curl", get_dbs_args);
   __.each(couchdbInfo, function(info, course) {
     if (info.hasOwnProperty('db') && course !== '_admin') {
       var db_url = url.parse(info.db);
@@ -44,10 +55,10 @@ try {
       var username = up[0],
         password = up[1];
 
-      var docker_url = info.db.replace(db_url.host, "couchdb:6984");
+      var docker_url = info.db.replace(db_url.host, docker_host);
       var docker_url_comps = url.parse(docker_url);
 
-      db_url.host = "couchdb:6984";
+      db_url.host = docker_host;
 
       console.log("checking to see if db/user exists for " + course + " ...");
 
@@ -59,28 +70,34 @@ try {
       if (result !== undefined && !result.hasOwnProperty('error')) {
         console.log("DB/user exists! skipping...");
       } else {
+        // TODO :we probably should be creating users here, not admins as we're doing. http://wiki.apache.org/couchdb/How_to_create_users_via_script
         console.log("creating the user " + username + "...");
 
-        args = ["--insecure", "-X", "PUT", couchdbInfo._admin.db + "/_config/admins/" + username, "-d", "\"" + password + "\""];
+        args = ["--insecure", "-X", "PUT", docker_admin_url + "/_config/admins/" + username, "-d", '"' + password + '"'];
         run_cmd("curl", args);
 
         console.log("creating the db...");
         args = ["--insecure", "-X", "PUT", docker_url];
         run_cmd("curl", args);
-        //  curl --insecure -X PUT https://user$i:pass$i@$DB:6984/db$i
 
         console.log("configuring the db...");
         args = ["couchdb/setup.js", docker_url];
         run_cmd("node", args);
 
         console.log("populating existing files...");
-        uploadAllDocs(docker_url.replace(docker_url_comps.pathname, ""), db_url.path.replace("/", ""), couchdbInfoRootPath + 'dtu-data/' + course + '-content');
+        uploadAllDocs(docker_url.replace(docker_url_comps.pathname, ""), db_url.path.replace("/", ""), couchdbInfoRootPath + '../website-raw/' + course);
 
         args = ["couchdb/setup.js", docker_url];
         run_cmd("node", args);
       }
     }
+
   });
+
+  console.log("USERS/DBS AFTER SETUP");
+  run_cmd("curl", get_users_args);
+  run_cmd("curl", get_admins_args);
+  run_cmd("curl", get_dbs_args);
 } catch (e) {
   console.error(e);
 }

@@ -4,18 +4,16 @@ var FileStore = require('session-file-store')(session);
 var app = express();
 var compression = require('compression');
 var serveStatic = require('serve-static');
-var yamlJs = require('yamljs');
-var __ = require('underscore');
+var dtuConfig = require('./dtuConfig');
 var CASAuthentication = require('cas-authentication');
 
 // Set up an Express session, which is required for CASAuthentication. 
 app.use(session({
-  secret: 'super secret key',
+  secret: dtuConfig.sessionSecret,
   store: new FileStore(),
   resave: true,
   saveUninitialized: true,
 }));
-
 
 // Configure ejs engine
 app.set('views', __dirname + '/../views');
@@ -86,72 +84,16 @@ app.get('/viewer', debug_wrapper(function() {
   res.renderDebug('viewer.html');
 });
 
-var courseInfoRootPath = '/data/config/';
-var courseInfo = {
-  error: 'uninitialized'
-};
-app.loadDtuData = function() {
-
-  var fileName;
-  try {
-    courseInfo = yamlJs.load(courseInfoRootPath + 'courses.yaml');
-
-    __.each(courseInfo, function(info, course) {
-      var users = [];
-      if (info.hasOwnProperty('groups')) {
-        fileName = courseInfoRootPath + info.groups;
-        courseInfo[course].groups = yamlJs.load(fileName);
-
-        __.each(courseInfo[course].groups, function(group_info, group) {
-
-          __.each(courseInfo[course].groups[group], function(authority, user) {
-            if (authority == 'Administrator') {
-              users.push(user);
-            }
-          });
-        });
-      }
-
-      courseInfo[course].members = __.uniq(users);
-    });
-  } catch (e) {
-    courseInfo = {
-      error: e,
-      fileName: fileName
-    };
-  }
-
-  try {
-    var couchdb = yamlJs.load(courseInfoRootPath + 'couchdb.yaml');
-
-    __.each(couchdb, function(info, course) {
-      if (!courseInfo.hasOwnProperty(course)) {
-        console.error('Course ' + course + 'defined in courses.yaml does not have a db specified in couchdb.yaml');
-        throw new Error("Invalid configuration");
-      } else {
-        courseInfo[course].db = info.db;
-      }
-    });
-  } catch (e) {
-    courseInfo = {
-      error: e,
-      fileName: fileName
-    };
-  }
-
-  console.log("DTU-Data loaded");
-  console.log(courseInfo);
-};
-
-
 app.get('/data/courses', function(req, res) {
-  res.json(courseInfo);
+  res.json(dtuConfig.courseInfo);
 });
 
 // Serve login.html in /login
 app.get('/login', debug_wrapper(function() {
   cas.bounce.apply(cas, arguments);
 }), function(req, res) {
+
+  var courseInfo = dtuConfig.courseInfo;
 
   if (courseInfo.hasOwnProperty('error')) {
     // handle the case where the YAML file failed to parse.
@@ -206,8 +148,6 @@ app.use(function(req, res) {
 });
 
 app.setServer = function(server) {
-  app.loadDtuData();
-
   var protocol = process.env.SE_EXTERNAL_PROTOCOL;
   var port = process.env.SE_EXTERNAL_PORT || server.address().port;
   var host = process.env.SE_EXTERNAL_HOST || server.address().address;
