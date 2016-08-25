@@ -1,13 +1,10 @@
 README.md
 README.rdoc
 .git
-pdf.js/.git
-pdf.js/node_modules
 LICENSE
 tmp/
 log/
+doc/
 node_modules
-vendor/assets/components/
-public/assets/
 
 

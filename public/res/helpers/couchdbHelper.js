@@ -11,6 +11,25 @@ define([
   "classes/AsyncTask"
 ], function($, _, core, utils, storage, logger, constants, settings, eventMgr, AsyncTask) {
 
+  function handleError(jqXHR, task) {
+    var error = {
+      code: jqXHR.status,
+      message: jqXHR.statusText,
+      reason: (jqXHR.responseJSON || {}).reason
+    };
+    var errorMsg;
+    if (error) {
+      logger.error(error);
+      // Try to analyze the error
+      if (typeof error === "string") {
+        errorMsg = error;
+      } else {
+        errorMsg = "Error " + error.code + ": " + (error.reason || error.message);
+      }
+    }
+    task.error(new Error(errorMsg));
+  }
+
   var couchdbHelper = {};
 
   // Listen to offline status changes
@@ -22,20 +41,20 @@ define([
   couchdbHelper.addAuth = function(ajax_options) {
 
     //var url = "http://user01005:pass01005@46.101.159.100:3001/db01005"
-    var url = ajax_options.url
+    var url = ajax_options.url;
     var domain = url.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
 
-    console.log(domain)
+    console.log(domain);
 
-    var user_and_password = domain.split('@')
+    var user_and_password = domain.split('@');
 
-    var username
-    var password
+    var username;
+    var password;
     if (user_and_password.length > 1) {
-      var up = user_and_password[0].split(':')
-      username = up[0]
-      password = up[1]
-      url = url.replace(user_and_password[0] + '@', '')
+      var up = user_and_password[0].split(':');
+      username = up[0];
+      password = up[1];
+      url = url.replace(user_and_password[0] + '@', '');
     }
 
     console.log(url);
@@ -47,7 +66,7 @@ define([
         headers: _.extend({
           "Authorization": "Basic " + btoa(username + ":" + password)
         }, ajax_options.headers || {}),
-      }
+      };
     }
 
     console.log(auth_options);
@@ -260,25 +279,6 @@ define([
     });
     task.enqueue();
   };
-
-  function handleError(jqXHR, task) {
-    var error = {
-      code: jqXHR.status,
-      message: jqXHR.statusText,
-      reason: (jqXHR.responseJSON || {}).reason
-    };
-    var errorMsg;
-    if (error) {
-      logger.error(error);
-      // Try to analyze the error
-      if (typeof error === "string") {
-        errorMsg = error;
-      } else {
-        errorMsg = "Error " + error.code + ": " + (error.reason || error.message);
-      }
-    }
-    task.error(new Error(errorMsg));
-  }
 
   return couchdbHelper;
 });

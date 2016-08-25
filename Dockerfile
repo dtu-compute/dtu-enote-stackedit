@@ -27,5 +27,8 @@ RUN npm install -g runsync
 RUN npm install -g bower
 RUN bower install --allow-root
 
+RUN npm install -g gulp
+RUN gulp default
+
 CMD ["./cmd.sh"]
 

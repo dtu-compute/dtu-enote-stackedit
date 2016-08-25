@@ -39,8 +39,8 @@ function debug_wrapper(f) {
   return function(req, res, next) {
     if (!req.query.hasOwnProperty('debug')) {
       console.log('BOUNCE: ' + req.url);
-      console.log(JSON.stringify(req.session.cas_user, null, 4));
-      console.log(JSON.stringify(req.session.cas_userinfo, null, 4));
+      console.log('CAS_USER: ' + JSON.stringify(req.session.cas_user, null, 4));
+      console.log('CAS_USERINFO:' + JSON.stringify(req.session.cas_userinfo, null, 4));
       console.log('BOUNCE: ' + JSON.stringify(req.headers, null, 4));
       return f(req, res, next);
     } else {
@@ -86,41 +86,62 @@ app.get('/viewer', debug_wrapper(function() {
   res.renderDebug('viewer.html');
 });
 
-var courseInfoRootPath = '/data/config/'
+var courseInfoRootPath = '/data/config/';
 var courseInfo = {
   error: 'uninitialized'
 };
-var fileName;
-try {
-  courseInfo = yamlJs.load(courseInfoRootPath + 'courses.yaml');
+app.loadDtuData = function() {
 
-  __.each(courseInfo, function(info, course) {
-    var users = []
-    if (info.hasOwnProperty('groups')) {
-      fileName = courseInfoRootPath + info.groups;
-      courseInfo[course]['groups'] = yamlJs.load(fileName);
+  var fileName;
+  try {
+    courseInfo = yamlJs.load(courseInfoRootPath + 'courses.yaml');
 
-      __.each(courseInfo[course]['groups'], function(group_info, group) {
+    __.each(courseInfo, function(info, course) {
+      var users = [];
+      if (info.hasOwnProperty('groups')) {
+        fileName = courseInfoRootPath + info.groups;
+        courseInfo[course].groups = yamlJs.load(fileName);
 
-        __.each(courseInfo[course]['groups'][group], function(authority, user) {
-          if (authority == 'Administrator') {
-            users.push(user);
-          }
-        })
-      })
-    }
+        __.each(courseInfo[course].groups, function(group_info, group) {
 
-    courseInfo[course]['members'] = __.uniq(users);
-  })
-} catch (e) {
-  courseInfo = {
-    error: e,
-    fileName: fileName
-  };
-}
+          __.each(courseInfo[course].groups[group], function(authority, user) {
+            if (authority == 'Administrator') {
+              users.push(user);
+            }
+          });
+        });
+      }
 
-console.log("STACKEDIT startup")
-console.log(courseInfo)
+      courseInfo[course].members = __.uniq(users);
+    });
+  } catch (e) {
+    courseInfo = {
+      error: e,
+      fileName: fileName
+    };
+  }
+
+  try {
+    var couchdb = yamlJs.load(courseInfoRootPath + 'couchdb.yaml');
+
+    __.each(couchdb, function(info, course) {
+      if (!courseInfo.hasOwnProperty(course)) {
+        console.error('Course ' + course + 'defined in courses.yaml does not have a db specified in couchdb.yaml');
+        throw new Error("Invalid configuration");
+      } else {
+        courseInfo[course].db = info.db;
+      }
+    });
+  } catch (e) {
+    courseInfo = {
+      error: e,
+      fileName: fileName
+    };
+  }
+
+  console.log("DTU-Data loaded");
+  console.log(courseInfo);
+};
 
 
 app.get('/data/courses', function(req, res) {
@@ -185,7 +206,9 @@ app.use(function(req, res) {
 });
 
 app.setServer = function(server) {
-  var protocol = process.env.SE_EXTERNAL_PROTOCOL
+  app.loadDtuData();
+
+  var protocol = process.env.SE_EXTERNAL_PROTOCOL;
   var port = process.env.SE_EXTERNAL_PORT || server.address().port;
   var host = process.env.SE_EXTERNAL_HOST || server.address().address;
 

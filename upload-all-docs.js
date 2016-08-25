@@ -13,14 +13,14 @@ function uploadAllDocs(url, coursedb, folder) {
     "parseUrl": true
   });
 
-  console.log(couch)
+  console.log(couch);
 
   var db = couch.use(coursedb);
 
   // Copied from stackedit
   // Generates a 24 char length random id
   var idAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  id = function() {
+  var id = function() {
     var result = [];
     for (var i = 0; i < 24; i++) {
       result.push(idAlphabet[Math.random() * idAlphabet.length | 0]);
@@ -36,7 +36,7 @@ function uploadAllDocs(url, coursedb, folder) {
         var updated = new Date(fs.statSync(fname).mtime).getTime();
         var b64 = new Buffer(fs.readFileSync(fname)).toString('base64');
 
-	console.log('uploading ' + title)
+        console.log('uploading ' + title);
 
         var doc = {
           "_id": id(),
@@ -48,7 +48,7 @@ function uploadAllDocs(url, coursedb, folder) {
               "data": b64
             }
           }
-        }
+        };
 
         db.insert(doc, function(err, body) {
           if (!err) {
@@ -57,12 +57,12 @@ function uploadAllDocs(url, coursedb, folder) {
           } else {
             console.error(err);
           }
-        })
-      })
+        });
+      });
     } else {
       console.error(er);
     }
-  })
+  });
 }
 
 module.exports = uploadAllDocs;

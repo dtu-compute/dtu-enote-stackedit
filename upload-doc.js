@@ -1,12 +1,12 @@
 var fs = require('fs');
-var nano = require('nano')
+var nano = require('nano');
 var path = require('path');
 
 
 function uploadFile(url, coursedb, fname) {
 
-  var title = path.basename(fname, ".md")
-  var updated = new Date(fs.statSync(fname).mtime).getTime()
+  var title = path.basename(fname, ".md");
+  var updated = new Date(fs.statSync(fname).mtime).getTime();
   var couch = nano({
     "url": url,
     "parseUrl": true
@@ -14,12 +14,10 @@ function uploadFile(url, coursedb, fname) {
 
   var db = couch.use(coursedb);
 
-
-
   // Copied from stackedit
   // Generates a 24 char length random id
   var idAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  id = function() {
+  var id = function() {
     var result = [];
     for (var i = 0; i < 24; i++) {
       result.push(idAlphabet[Math.random() * idAlphabet.length | 0]);
@@ -32,7 +30,7 @@ function uploadFile(url, coursedb, fname) {
   }, function(err, body) {
     if (!err) {
       body.rows.filter(function(doc) {
-        return doc.id.indexOf('_design') !== 0
+        return doc.id.indexOf('_design') !== 0;
       }).forEach(function(doc) {
 
         console.log(doc);
@@ -41,20 +39,20 @@ function uploadFile(url, coursedb, fname) {
           include_doc: true
         }, function(err, body) {
           if (!err) {
-            console.log(body)
+            console.log(body);
           } else {
             console.error(err);
           }
-        })
+        });
 
 
         db.attachment.get(doc.id, "content", function(err, body) {
           if (!err) {
-            console.log(body.toString())
+            console.log(body.toString());
           } else {
             console.error(err);
           }
-        })
+        });
       });
 
     } else {
@@ -62,7 +60,7 @@ function uploadFile(url, coursedb, fname) {
     }
   });
 
-  b64 = new Buffer(fs.readFileSync(fname)).toString('base64');
+  var b64 = new Buffer(fs.readFileSync(fname)).toString('base64');
 
 
   var doc = {
@@ -75,17 +73,17 @@ function uploadFile(url, coursedb, fname) {
         "data": b64
       }
     }
-  }
+  };
 
-  console.log(doc)
+  console.log(doc);
 
   db.insert(doc, function(err, body) {
     if (!err) {
-      console.log(body)
+      console.log(body);
     } else {
       console.error(err);
     }
-  })
+  });
 }
 
 module.exports = uploadFile;
