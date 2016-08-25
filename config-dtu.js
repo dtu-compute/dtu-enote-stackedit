@@ -30,15 +30,15 @@ function run_cmd(cmd, args) {
 }
 
 
-var courseInfoRootPath = '/data/config';
-var courseInfo = {
+var couchdbInfoRootPath = '/data/config';
+var couchdbInfo = {
   error: 'uninitialized'
 };
 try {
-  courseInfo = yamlJs.load(courseInfoRootPath + '/couchdb.yaml');
+  couchdbInfo = yamlJs.load(couchdbInfoRootPath + '/couchdb.yaml');
 
-  __.each(courseInfo, function(info, course) {
-    if (info.hasOwnProperty('db')) {
+  __.each(couchdbInfo, function(info, course) {
+    if (info.hasOwnProperty('db') && course !== '_admin') {
       var db_url = url.parse(info.db);
       var up = db_url.auth.split(':');
       var username = up[0],
@@ -61,7 +61,7 @@ try {
       } else {
         console.log("creating the user " + username + "...");
 
-        args = ["--insecure", "-X", "PUT", "https://dtuadmin:Aevee7Le@" + db_url.host + "/_config/admins/" + username, "-d", "\"" + password + "\""];
+        args = ["--insecure", "-X", "PUT", couchdbInfo._admin.db + "/_config/admins/" + username, "-d", "\"" + password + "\""];
         run_cmd("curl", args);
 
         console.log("creating the db...");
@@ -74,7 +74,7 @@ try {
         run_cmd("node", args);
 
         console.log("populating existing files...");
-        uploadAllDocs(docker_url.replace(docker_url_comps.pathname, ""), db_url.path.replace("/", ""), courseInfoRootPath + 'dtu-data/' + course + '-content');
+        uploadAllDocs(docker_url.replace(docker_url_comps.pathname, ""), db_url.path.replace("/", ""), couchdbInfoRootPath + 'dtu-data/' + course + '-content');
 
         args = ["couchdb/setup.js", docker_url];
         run_cmd("node", args);
