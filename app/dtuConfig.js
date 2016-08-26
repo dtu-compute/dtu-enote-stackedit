@@ -9,10 +9,6 @@ var dtuConfig = (function() {
   var courseInfo = {
     error: 'uninitialized'
   };
-  var stackeditConfig = {
-    sessionSecret: 'default secret unsafe banana'
-  };
-
 
   try {
 
@@ -51,11 +47,6 @@ var dtuConfig = (function() {
         courseInfo[course].db = couchdb[course].db;
       }
     });
-
-
-    // stackedit config
-    fileName = configRootPath + 'stackedit.yaml';
-    stackeditConfig = yamlJs.load(fileName);
   } catch (e) {
     courseInfo = {
       error: e,
@@ -65,12 +56,10 @@ var dtuConfig = (function() {
 
   console.log("DTU-Data loaded");
   console.log(courseInfo);
-  console.log('secret: ' + stackeditConfig.sessionSecret);
-  console.log(stackeditConfig);
 
   return {
     courseInfo: courseInfo,
-    sessionSecret: stackeditConfig.sessionSecret
+    sessionSecret: process.env.SESSION_SECRET
   };
 })();
 

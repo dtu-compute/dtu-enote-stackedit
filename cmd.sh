@@ -18,12 +18,11 @@ done
 export NODE_TLS_REJECT_UNAUTHORIZED=0
 
 
-#echo create master admin user
-# handled in local.ini of couchdb so there's never an admin party
-#curl  --insecure -X PUT https://$DB:6984/_config/admins/dtuadmin -d '"'Aevee7Le'"'
-
 echo create databases/documents...
 node config-dtu.js
+
+echo creating secret...
+export SESSION_SECRET=$(od -vAn -N16 -tx < /dev/urandom | tr -d " ")
 
 echo starting server...
 node server.js
