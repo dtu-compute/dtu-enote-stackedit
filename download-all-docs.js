@@ -3,14 +3,15 @@ var fs = require('fs');
 var nano = require('nano');
 var path = require('path');
 
-function downloadFiles(url, coursedb, folder) {
+function downloadFiles(url, coursedb, folder, filespec) {
 
   var couch = nano({
     "url": url,
     "parseUrl": true
   });
 
-  var db = couch.use(coursedb);
+  //var db = couch.use(coursedb);
+  var db = couch;
 
   db.list({}, function(err, body) {
     if (!err) {
@@ -24,6 +25,20 @@ function downloadFiles(url, coursedb, folder) {
           include_doc: true
         }, function(err, doc_body) {
           if (!err) {
+
+            var matches = true;
+            if (filespec.length > 0) {
+              matches = __.reduce(__.map(filespec, function(x) {
+                return doc_body.title.match(x);
+              }), function(l, r) {
+                return l || r;
+              }, false);
+            }
+
+            if (!matches) {
+              console.log('\t NOT Loading ' + doc_body.title + ' id ' + id + "doesn't match filespec");
+              return;
+            }
 
             console.log('Loading ' + doc_body.title + ' id ' + id);
 

@@ -13,9 +13,8 @@ function uploadAllDocs(url, coursedb, folder) {
     "parseUrl": true
   });
 
-  console.log(couch);
-
-  var db = couch.use(coursedb);
+  //var db = couch.use(coursedb);
+  var db = couch;
 
   // Copied from stackedit
   // Generates a 24 char length random id
