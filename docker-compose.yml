@@ -1,8 +1,8 @@
 stackedit:
   build: /docker/stackedit
   env_file: external.env
-  ports:
-    - "3000:3000"
+  expose:
+    - "3000"
   # do not change "db". When linking, it becomes the hostname and is used in various scrpts
   links:
     - couchdb:db
