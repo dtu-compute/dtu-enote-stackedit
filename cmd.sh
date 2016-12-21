@@ -1,11 +1,7 @@
 #!/usr/bin/bash
 
-
-# db is the hostname of the couchdb host which is specified in docker-compose from linking containers
-DB=couchdb
-
 while true; do
-    if curl  --insecure -k https://$DB:6984 | /usr/bin/grep -q Welcome; then
+    if curl --insecure -k https://couchdb.compute.dtu.dk | /usr/bin/grep -q Welcome; then
         echo "Database up"
         break
     fi
