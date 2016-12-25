@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 while true; do
-    if curl --insecure -k https://couchdb.compute.dtu.dk | /usr/bin/grep -q Welcome; then
+    if curl couchdb:5984 | /usr/bin/grep -q Welcome; then
         echo "Database up"
         break
     fi
@@ -9,10 +9,8 @@ while true; do
     sleep 5
 done
 
-
 # ignore self signed cert warning
 export NODE_TLS_REJECT_UNAUTHORIZED=0
-
 
 echo create databases/documents...
 node config-dtu.js
@@ -22,4 +20,3 @@ export SESSION_SECRET=$(od -vAn -N16 -tx < /dev/urandom | tr -d " ")
 
 echo starting server...
 node server.js
-
