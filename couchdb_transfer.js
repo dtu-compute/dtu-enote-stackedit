@@ -5,10 +5,10 @@ downloadAllDocs = require("./download-all-docs.js");
 
 if (!(process.argv[2].match("(im|ex)port")) ||
   process.argv.length < 4) {
-  throw "couchdb_transfer.js <export|import> <course> <filespec...>";
+  throw "couchdb_transfer.js <export|import> <course> <folder> <filespec...>";
 }
 
-var configRootPath = "../vol/config/";
+var configRootPath = "/vol/config/";
 var course = process.argv[3];
 var upload = process.argv[2] !== 'export';
 
@@ -24,14 +24,14 @@ try {
 
   var dbUrl = couchdbConfig[course].db;
   var coursedb = "db" + course;
-  var folder = '.';
+  var folder = process.argv[4] || '.';
 
   if (upload) {
     console.log("Importing...");
     uploadAllDocs(dbUrl, coursedb, folder);
   } else {
     console.log("Exporting... ");
-    var filespec = process.argv.slice(4);
+    var filespec = process.argv.slice(5);
     console.log(filespec);
 
     downloadAllDocs(dbUrl, coursedb, folder, filespec);
