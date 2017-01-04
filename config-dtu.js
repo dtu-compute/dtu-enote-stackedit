@@ -34,12 +34,12 @@ var couchdbInfoRootPath = '/data/config';
 var couchdbInfo = {
   error: 'uninitialized'
 };
-var docker_host = "couchdb:6984";
+var docker_host = "couchdb:5984";
 try {
   couchdbInfo = yamlJs.load(couchdbInfoRootPath + '/couchdb.yaml');
 
   var db_admin_url = url.parse(couchdbInfo._admin.db);
-  var docker_admin_url = couchdbInfo._admin.db.replace(db_admin_url.host, docker_host);
+  var docker_admin_url = couchdbInfo._admin.db.replace(db_admin_url.host, docker_host).replace('https', 'http');
 
   console.log("USERS/DBS BEFORE SETUP");
   var get_users_args = ["--insecure", docker_admin_url + '/_users/_all_docs', '-H', 'Accept: application/json, text/javascript; q=0.01', '-H', 'Accept-Encoding: identity'];
@@ -55,7 +55,7 @@ try {
       var username = up[0],
         password = up[1];
 
-      var docker_url = info.db.replace(db_url.host, docker_host);
+      var docker_url = info.db.replace(db_url.host, docker_host).replace('https', 'http');
       var docker_url_comps = url.parse(docker_url);
 
       db_url.host = docker_host;
