@@ -27,10 +27,10 @@ try {
   var folder = process.argv[4] || '.';
 
   if (upload) {
-    console.log("Importing...");
+    console.log("Importing " + dbUrl + "...");
     uploadAllDocs(dbUrl, coursedb, folder);
   } else {
-    console.log("Exporting... ");
+    console.log("Exporting to " + dbUrl + "... ");
     var filespec = process.argv.slice(5);
     console.log(filespec);
 
