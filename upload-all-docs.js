@@ -27,41 +27,74 @@ function uploadAllDocs(url, coursedb, folder) {
     return result.join('');
   };
 
-  glob(folder + '/*.md', {}, function(er, files) {
-    if (!er) {
-      __.each(files, function(fname) {
 
-        var title = path.basename(fname, ".md");
-        var updated = new Date(fs.statSync(fname).mtime).getTime();
-        var b64 = new Buffer(fs.readFileSync(fname)).toString('base64');
-
-        console.log('uploading ' + title);
-
-        var doc = {
-          "_id": id(),
-          "title": title,
-          "updated": updated,
-          "_attachments": {
-            "content": {
-              "content_type": "text/plain",
-              "data": b64
-            }
-          }
-        };
-
-        db.insert(doc, function(err, body) {
-          if (!err) {
-            console.log("Succeeded in uploading " + fname + " ...");
-            console.log(body);
-          } else {
-            console.error(err);
-          }
+  db.list({
+    include_docs: true,
+    limit: 100,
+    descending: true
+  }, function(error, body /*, headers*/ ) {
+    doc_map = {};
+    __.each(body.rows, function(i) {
+      if (i.doc.title && doc_map.hasOwnProperty(i.doc.title)) {
+        db.destroy(i.id, i.doc._rev, function(error, headers) {
+          console.log("deleted " + i.id + " " + i.doc.title + " " + error + ";" + headers);
         });
-      });
-    } else {
-      console.error(er);
-    }
+      } else {
+        doc_map[i.doc.title] = i.doc;
+      }
+    });
+    console.log(doc_map);
+
+    glob(folder + '/*.md', {}, function(er, files) {
+      if (!er) {
+        __.each(files, function(fname) {
+
+          var title = path.basename(fname, ".md");
+          var updated = new Date(fs.statSync(fname).mtime).getTime();
+          var b64 = new Buffer(fs.readFileSync(fname)).toString('base64');
+
+          console.log('uploading ' + title);
+
+          var doc = {
+            "_id": id(),
+            "title": title,
+            "updated": updated,
+            "_attachments": {
+              "content": {
+                "content_type": "text/plain",
+                "data": b64
+              }
+            }
+          };
+
+          if (doc_map.hasOwnProperty(title)) {
+            doc._id = doc_map[title]._id;
+            doc._rev = doc_map[title]._rev;
+          }
+
+          db.insert(doc, function(err, body) {
+            if (!err) {
+              console.log("Succeeded in uploading " + fname + " ...");
+              console.log(body);
+            } else {
+              console.error(err);
+            }
+          });
+
+        });
+      } else {
+        console.error(er);
+      }
+    });
+
+    //    console.log(body.map(function(d) {
+    //      d.doc
+    //    }));
   });
+
+  return;
+
+
 }
 
 module.exports = uploadAllDocs;
