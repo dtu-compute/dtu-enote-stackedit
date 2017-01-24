@@ -70,7 +70,7 @@ function uploadAllDocs(url, coursedb, folder) {
           if (doc_map.hasOwnProperty(title)) {
             doc._id = doc_map[title]._id;
             doc._rev = doc_map[title]._rev;
-          };
+          }
 
           db.insert(doc, function(err, body) {
             if (!err) {
