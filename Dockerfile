@@ -1,4 +1,4 @@
-FROM fedora:23
+FROM fedora:24
 
 RUN dnf -y update
 RUN dnf -y install nodejs npm git
