@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 while true; do
-    if curl couchdb:5984 | /usr/bin/grep -q Welcome; then
+    if curl -sS website-db:5984 | /usr/bin/grep -q Welcome; then
         echo "Database up"
         break
     fi

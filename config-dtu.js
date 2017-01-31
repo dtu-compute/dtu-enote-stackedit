@@ -34,7 +34,7 @@ var couchdbInfoRootPath = '/data/config';
 var couchdbInfo = {
   error: 'uninitialized'
 };
-var docker_host = "couchdb:5984";
+var docker_host = "website-db:5984";
 try {
   couchdbInfo = yamlJs.load(couchdbInfoRootPath + '/couchdb.yaml');
 
