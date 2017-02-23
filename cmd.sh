@@ -14,6 +14,7 @@ export NODE_TLS_REJECT_UNAUTHORIZED=0
 
 echo create databases/documents...
 node config-dtu.js
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
 echo creating secret...
 export SESSION_SECRET=$(od -vAn -N16 -tx < /dev/urandom | tr -d " ")

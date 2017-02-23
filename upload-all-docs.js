@@ -34,6 +34,10 @@ function uploadAllDocs(url, coursedb, folder) {
     descending: true
   }, function(error, body /*, headers*/ ) {
     doc_map = {};
+    if (error) {
+      console.error(error);
+      return;
+    }
     __.each(body.rows, function(i) {
       if (i.doc.title && doc_map.hasOwnProperty(i.doc.title)) {
         db.destroy(i.id, i.doc._rev, function(error, headers) {
