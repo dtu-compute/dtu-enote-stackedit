@@ -1,7 +1,7 @@
 var yamlJs = require('yamljs');
 var __ = require('underscore');
 var url = require('url');
-var runsync = require('runsync'); // use this instead of child_process since we're bound to node 0.10.x
+var child_process = require('child_process');
 //var uploadAllDocs = require("./upload-all-docs.js");
 
 
@@ -10,7 +10,7 @@ function run_cmd(cmd, args) {
   console.log("executing: " + cmd);
   console.log(args);
   try {
-    var child = runsync.spawn(cmd, args, {
+    var child = child_process.spawnSync(cmd, args, {
       encoding: "utf8"
     });
     console.log("ended: " + cmd + "EXIT STATUS: " + child.status);

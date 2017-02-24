@@ -1,26 +1,20 @@
-FROM fedora:23
+FROM fedora:25
 
 RUN dnf -y update
 RUN dnf -y install nodejs npm git
 
-RUN dnf search make
-
-# For runsync
-RUN dnf -y install make
-RUN dnf -y install gcc
-RUN dnf -y install gcc-c++
-RUN dnf -y install python
-
 # For hostname
 RUN dnf -y install net-tools
+
+RUN node -v
+RUN npm -v
 
 RUN mkdir /stackedit
 WORKDIR /stackedit
 
 COPY ./package.json /stackedit
 
-#UN npm install -g node-gyp
-#RUN npm install -g runsync
+RUN npm install -g node-gyp
 RUN npm install
 
 COPY ./bower.json /stackedit
@@ -31,6 +25,7 @@ RUN bower install --allow-root
 
 COPY . /stackedit
 
+RUN npm install --save-dev bower
 RUN npm install -g gulp
 RUN gulp default
 
