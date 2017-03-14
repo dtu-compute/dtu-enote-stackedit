@@ -2,6 +2,7 @@ var yamlJs = require('yamljs');
 var __ = require('underscore');
 
 var configRootPath = '/data/config/';
+var userConfigRootPath = '/data/user_config/';
 
 var dtuConfig = (function() {
 
@@ -19,7 +20,7 @@ var dtuConfig = (function() {
     __.each(courseInfo, function(info, course) {
       var users = [];
       if (info.hasOwnProperty('groups')) {
-        fileName = configRootPath + info.groups;
+        fileName = userConfigRootPath + info.groups;
         courseInfo[course].groups = yamlJs.load(fileName);
 
         __.each(courseInfo[course].groups, function(group_info, group) {
