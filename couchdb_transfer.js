@@ -8,7 +8,7 @@ if (!(process.argv[2].match("(im|ex)port")) ||
   throw "couchdb_transfer.js <export|import> <course> <folder> <filespec...>";
 }
 
-var configRootPath = (process.env.DTU_DATA_ROOT + "/config/") || "./vol/config/";
+var configRootPath = (process.env.DTU_DATA_ROOT || "/vol") + "/config/";
 var course = process.argv[3];
 var upload = process.argv[2] !== 'export';
 
