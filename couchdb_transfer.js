@@ -12,6 +12,7 @@ var configRootPath = (process.env.DTU_DATA_ROOT || "/vol") + "/config/";
 var course = process.argv[3];
 var upload = process.argv[2] !== 'export';
 
+console.log(process.argv);
 
 try {
   fileName = configRootPath + 'couchdb.yaml';
@@ -27,7 +28,7 @@ try {
   var folder = process.argv[4] || '.';
 
   if (upload) {
-    console.log("Importing " + dbUrl + "...");
+    console.log("Importing " + dbUrl + " from " + folder + "...");
     uploadAllDocs(dbUrl, coursedb, folder);
   } else {
     console.log("Exporting to " + dbUrl + "... ");
